@@ -110,12 +110,13 @@ class Sendsmsmail_model extends CI_Model
             );
         }
 
-        $config['protocol'] = 'SMTP';
+        $config['protocol'] = 'smtp';
         $config['useragent'] = "CodeIgniter";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
         $config['charset'] = 'utf-8';
         $config['wordwrap'] = true;
+        //var_dump($config); exit;
 
         $this->load->library('email', $config);
         $this->email->from($getConfig['email'], get_global_setting('institute_name'));
