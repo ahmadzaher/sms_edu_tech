@@ -22,6 +22,7 @@ class Dashboard extends Admin_Controller
 
     public function index()
     {
+        echo 'hi'; exit;
         if (is_student_loggedin() || is_parent_loggedin()) {
             $studentID = 0;
             if (is_student_loggedin()) {
