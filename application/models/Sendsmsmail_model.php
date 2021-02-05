@@ -99,8 +99,8 @@ class Sendsmsmail_model extends CI_Model
         $message = str_replace('{mobile_no}', $mobileNo, $message);
 
         $branchID = $this->application_model->get_branch_id();
-        $getConfig = $this->db->get_where('email_config', array('id' => 1, 'branch_id' => $branchID))->row_array();
-        if (true) {
+        $getConfig = $this->db->get_where('email_config', array('branch_id' => $branchID))->row_array();
+        if ($getConfig['protocol'] == 'smtp') {
             $config = array(
                 'smtp_host' => $getConfig['smtp_host'],
                 'smtp_port' => $getConfig['smtp_port'],
@@ -110,13 +110,14 @@ class Sendsmsmail_model extends CI_Model
             );
         }
 
-        $config['protocol'] = 'smtp';
+        // var_dump($getConfig); exit;
+
+        $config['protocol'] = $getConfig['protocol'];
         $config['useragent'] = "CodeIgniter";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
         $config['charset'] = 'utf-8';
         $config['wordwrap'] = true;
-        //var_dump($config); exit;
 
         $this->load->library('email', $config);
         $this->email->from($getConfig['email'], get_global_setting('institute_name'));
