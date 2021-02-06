@@ -379,7 +379,7 @@ $config['encryption_key'] = '63313362353738653237';
 */
 $config['sess_driver'] = 'database';
 $config['sess_cookie_name'] = 'rm_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 2592000;
 $config['sess_save_path'] = 'rm_sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
