@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
 /**
@@ -6,10 +6,10 @@
  *
  * This library will help import a CSV file into
  * an associative array.
- * 
+ *
  * This library treats the first row of a CSV file
  * as a column header row.
- * 
+ *
  *
  * @package         CodeIgniter
  * @subpackage      Libraries
@@ -42,14 +42,14 @@ class Csvimport {
     {
         // Raise memory limit (for big files)
         ini_set('memory_limit', '20M');
-        
+
         // File path
         if(! $filepath)
         {
-            $filepath = $this->_get_filepath();    
+            $filepath = $this->_get_filepath();
         }
         else
-        {   
+        {
             // If filepath provided, set it
             $this->_set_filepath($filepath);
         }
@@ -57,22 +57,22 @@ class Csvimport {
         // If file doesn't exists, return false
         if(! file_exists($filepath))
         {
-            return FALSE;            
+            return FALSE;
         }
 
         // auto detect row endings
         if(! $detect_line_endings)
         {
-            $detect_line_endings = $this->_get_detect_line_endings();    
+            $detect_line_endings = $this->_get_detect_line_endings();
         }
         else
-        {   
+        {
             // If detect_line_endings provided, set it
             $this->_set_detect_line_endings($detect_line_endings);
         }
 
         // If true, auto detect row endings
-        if($detect_line_endings) 
+        if($detect_line_endings)
         {
             ini_set("auto_detect_line_endings", TRUE);
         }
@@ -80,7 +80,7 @@ class Csvimport {
         // Parse from this line on
         if(! $initial_line)
         {
-            $initial_line = $this->_get_initial_line();    
+            $initial_line = $this->_get_initial_line();
         }
         else
         {
@@ -90,10 +90,10 @@ class Csvimport {
         // Delimiter
         if(! $delimiter)
         {
-            $delimiter = $this->_get_delimiter();    
+            $delimiter = $this->_get_delimiter();
         }
         else
-        {   
+        {
             // If delimiter provided, set it
             $this->_set_delimiter($delimiter);
         }
@@ -101,7 +101,7 @@ class Csvimport {
         // Column headers
         if(! $column_headers)
         {
-            $column_headers = $this->_get_column_headers();    
+            $column_headers = $this->_get_column_headers();
         }
         else
         {
@@ -111,12 +111,12 @@ class Csvimport {
 
         // Open the CSV for reading
         $this->_get_handle();
-        
+
         $row = 0;
 
-        while (($data = fgetcsv($this->handle, 0, $this->delimiter)) !== FALSE) 
-        {     
-            if ($data[0] != NULL) 
+        while (($data = fgetcsv($this->handle, 0, $this->delimiter)) !== FALSE)
+        {
+            if ($data[0] != NULL)
             {
                 if($row < $this->initial_line)
                 {
@@ -140,31 +140,31 @@ class Csvimport {
                         foreach ($data as $key => $value)
                         {
                               $column_headers[$key] = trim($value);
-                        }                
-                    }          
+                        }
+                    }
                 }
                 else
                 {
                     $new_row = $row - $this->initial_line - 1; // needed so that the returned array starts at 0 instead of 1
                     foreach($column_headers as $key => $value) // assumes there are as many columns as their are title columns
                     {
-                    $result[$new_row][$value] = utf8_encode(trim($data[$key]));
+                    $result[$new_row][$value] = (($data[$key]));
                     }
                 }
-            
+
                 unset($data);
-            
+
                 $row++;
             }
         }
- 
+
         $this->_close_csv();
 
         return $result;
     }
 
 
-    
+
     /**
      * Sets the "detect_line_endings" flag
      *
@@ -368,5 +368,5 @@ class Csvimport {
     private function _close_csv()
     {
         fclose($this->handle);
-    }    
+    }
 }
