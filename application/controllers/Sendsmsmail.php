@@ -42,6 +42,28 @@ class Sendsmsmail extends Admin_Controller
         $this->load->view('layout/index', $this->data);
     }
 
+    public function semysms()
+    {
+        if (!get_permission('sendsmsmail', 'is_add')) {
+            access_denied();
+        }
+
+        $branchID = $this->application_model->get_branch_id();
+        $this->data['headerelements'] = array(
+            'css' => array(
+                'vendor/bootstrap-timepicker/css/bootstrap-timepicker.css',
+            ),
+            'js' => array(
+                'vendor/bootstrap-timepicker/bootstrap-timepicker.js',
+            ),
+        );
+        $this->data['branch_id'] = $branchID;
+        $this->data['title'] = translate('bulk_sms_and_email');
+        $this->data['sub_page'] = 'sendsmsmail/semysms';
+        $this->data['main_menu'] = 'sendsmsmail';
+        $this->load->view('layout/index', $this->data);
+    }
+
     public function email()
     {
         if (!get_permission('sendsmsmail', 'is_add')) {
@@ -121,7 +143,12 @@ class Sendsmsmail extends Admin_Controller
         }
 
         if ($_POST) {
-            $messageType = ($this->input->post('message_type') == 'sms' ? 1 : 2);
+            if($this->input->post('message_type') == 'sms')
+                $messageType = 1;
+            elseif($this->input->post('message_type') == 'semysms')
+                $messageType = 2;
+            else
+                $messageType = 3;
             $branchID = $this->application_model->get_branch_id();
             $recipientType = $this->input->post('recipient_type');
             if (is_superadmin_loggedin()) {
@@ -131,7 +158,7 @@ class Sendsmsmail extends Admin_Controller
             $this->form_validation->set_rules('message', translate('message'), 'trim|required');
             if ($messageType == 1) {
                 $this->form_validation->set_rules('sms_gateway', translate('sms_gateway'), 'trim|required');
-            } else {
+            } elseif($messageType == 3) {
                 $this->form_validation->set_rules('email_subject', translate('email_subject'), 'trim|required');
             }
             $this->form_validation->set_rules('recipient_type', translate('type'), 'trim|required');
@@ -271,7 +298,9 @@ class Sendsmsmail extends Admin_Controller
                     foreach ($user_array as $key => $value) {
                         if ($messageType == 1) {
                             $response = $this->sendsmsmail_model->sendSMS($value['mobileno'], $message, $value['name'], $value['email'], $smsGateway);
-                        } else {
+                        } elseif($messageType == 2) {
+                            $response = $this->sendsmsmail_model->sendSemySms($value['mobileno'], $message, $value['name'], $value['email']);
+                        } elseif($messageType == 3) {
                             $response = $this->sendsmsmail_model->sendEmail($value['email'], $message, $value['name'], $value['mobileno'], $emailSubject);
                         }
                         if ($response == true) {
@@ -296,14 +325,18 @@ class Sendsmsmail extends Admin_Controller
                 );
                 if ($messageType == 1) {
                     $arrayData['sms_gateway'] = $smsGateway;
-                } else {
+                } elseif($messageType == 2) {
+                    $arrayData['sms_gateway'] = 'semysms';
+                } elseif($messageType == 3) {
                     $arrayData['email_subject'] = $emailSubject;
                 }
                 $this->db->insert('bulk_sms_email', $arrayData);
                 set_alert('success', translate('message_sent_successfully'));
                 if ($messageType == 1) {
                     $url = base_url('sendsmsmail/sms');
-                } else {
+                } elseif($messageType == 2) {
+                    $url = base_url('sendsmsmail/semysms');
+                } elseif($messageType == 3) {
                     $url = base_url('sendsmsmail/email');
                 }
                 $array = array('status' => 'success', 'url' => $url, 'error' => '');
