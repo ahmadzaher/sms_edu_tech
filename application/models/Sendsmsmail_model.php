@@ -131,6 +131,17 @@ class Sendsmsmail_model extends CI_Model
         }
     }
 
+    public function sendSemySms($sendTo, $message, $name, $eMail)
+    {
+
+        $message = str_replace('{name}', $name, $message);
+        $message = str_replace('{email}', $eMail, $message);
+        $message = str_replace('{mobile_no}', $sendTo, $message);
+
+        $this->load->library('semysms');
+        return $this->semysms->send_message($sendTo, $message);
+    }
+
     public function sendSMS($sendTo, $message, $name, $eMail, $smsGateway)
     {
 
