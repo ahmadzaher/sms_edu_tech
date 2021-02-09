@@ -26,8 +26,8 @@
                                 <?php
                                     $arrayType = array(
                                         '' => translate('select'), 
-                                        '1' => 'Sms', 
-                                        '2' => 'Email', 
+                                        '2' => 'Sms',
+                                        '3' => 'Email',
                                     );;
                                     echo form_dropdown("campaign_type", $arrayType, set_value('campaign_type'), "class='form-control' required
                                     data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity'");
