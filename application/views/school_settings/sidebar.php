@@ -19,6 +19,8 @@ if ($this->input->get('branch_id')) {
             <li <?=$sub_page == 'school_settings/emailconfig' || $sub_page == 'school_settings/emailtemplate' ? 'class="active"' : '';?>><a href="<?=base_url('school_settings/emailconfig' . $url)?>"><i class="far fa-envelope"></i> <?=translate('email_settings')?></a></li>
         <?php } if (get_permission('accounting_links', 'is_view')) {?>
             <li <?=$sub_page == 'school_settings/accounting_links' ? 'class="active"' : '';?>><a href="<?=base_url('school_settings/accounting_links' . $url)?>"><i class="fas fa-random"></i> <?=translate('accounting_links')?></a></li>
+        <?php } if (get_permission('semysms_settings', 'is_view')) {?>
+            <li <?=$sub_page == 'school_settings/semysmsconfig' ? 'class="active"' : '';?>><a href="<?=base_url('school_settings/semysmsconfig' . $url)?>"><i class="fas fa-comment-alt"></i> <?=translate('semysms')?></a></li>
         <?php } ?>
         </ul>
     </div>

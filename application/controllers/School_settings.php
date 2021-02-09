@@ -311,6 +311,66 @@ class School_settings extends Admin_Controller
         $this->load->view('layout/index', $this->data);
     }
 
+    public function semysmsconfig()
+    {
+        if (!get_permission('semysms_settings', 'is_view')) {
+            access_denied();
+        }
+
+        if ($this->input->post('submit') == 'update') {
+            $data = array();
+            foreach ($this->input->post() as $key => $value) {
+                if ($key == 'submit') {
+                    continue;
+                }
+                $data[$key] = $value;
+            }
+            $this->db->where('id', 1);
+            $this->db->update('semysms_config', $data);
+            set_alert('success', translate('the_configuration_has_been_updated'));
+            // redirect(base_url('mailconfig/email'));
+        }
+        $branchID = $this->school_model->getBranchID();
+        $this->data['config'] = $this->school_model->get('semysms_config', array('branch_id' => $branchID), true);
+        $this->data['title'] = translate('semysms');
+        $this->data['sub_page'] = 'school_settings/semysmsconfig';
+        $this->data['main_menu'] = 'school_m';
+        $this->load->view('layout/index', $this->data);
+    }
+
+    public function saveSemySmsConfig()
+    {
+        if (!get_permission('semysms_settings', 'is_add')) {
+            access_denied();
+        }
+        $branchID = $this->school_model->getBranchID();
+
+        $this->form_validation->set_rules('device', 'Device', 'trim|required');
+        $this->form_validation->set_rules('token', 'Token', 'trim|required');
+
+        if($this->form_validation->run() !== false) {
+            $arrayConfig = array(
+                'device' => $this->input->post('device'),
+                'token' => $this->input->post('token'),
+                'branch_id' => $branchID,
+            );
+            $this->db->where('branch_id', $branchID);
+            $q = $this->db->get('semysms_config');
+            if ($q->num_rows() == 0) {
+                $this->db->insert('semysms_config', $arrayConfig);
+            } else {
+                $this->db->where('id', $q->row()->id);
+                $this->db->update('semysms_config', $arrayConfig);
+            }
+            $message = translate('the_configuration_has_been_updated');
+            $array = array('status' => 'success', 'message' => $message);
+        } else {
+            $error = $this->form_validation->error_array();
+            $array = array('status' => 'fail', 'error' => $error);
+        }
+        echo json_encode($array);
+    }
+
     public function sms_active()
     {
         if (!get_permission('sms_settings', 'is_add')) {
@@ -505,6 +565,19 @@ class School_settings extends Admin_Controller
     public function smstemplate()
     {
         if (!get_permission('sms_settings', 'is_add')) {
+            access_denied();
+        }
+        $branchID = $this->school_model->getBranchID();
+        $this->data['branch_id'] = $branchID;
+        $this->data['templatelist'] = $this->app_lib->get_table('sms_template');
+        $this->data['title'] = translate('sms_settings');
+        $this->data['sub_page'] = 'school_settings/smstemplate';
+        $this->data['main_menu'] = 'school_m';
+        $this->load->view('layout/index', $this->data);
+    }
+
+    public function semysmstemplate(){
+        if (!get_permission('semysms_settings', 'is_add')) {
             access_denied();
         }
         $branchID = $this->school_model->getBranchID();
