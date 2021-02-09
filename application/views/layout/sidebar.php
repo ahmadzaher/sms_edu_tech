@@ -988,8 +988,8 @@
                         </a>
                         <ul class="nav nav-children">
                             <?php if (get_permission('sendsmsmail', 'is_add')) {  ?>
-                            <li class="<?php if ($sub_page == 'sendsmsmail/sms' || $sub_page == 'sendsmsmail/email') echo 'nav-active';?>">
-                                <a href="<?=base_url('sendsmsmail/sms')?>">
+                            <li class="<?php if ($sub_page == 'sendsmsmail/sms' || $sub_page == 'sendsmsmail/email' || $sub_page == 'sendsmsmail/semysms') echo 'nav-active';?>">
+                                <a href="<?=base_url('sendsmsmail/semysms')?>">
                                     <span><i class="fas fa-caret-right"></i><?=translate('send')?> Sms / Email</span>
                                 </a>
                             </li>
