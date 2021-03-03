@@ -29,3 +29,10 @@ html.sidebar-left-sm .sidebar-left ul.nav-main li a {
 ul.nav-main li a {
     color: #959595;
 }
+html.dark body {
+    color: #959595;
+    font-size: 15px;
+}
+html.dark .text-muted {
+    color: #a8acba !important;
+}
