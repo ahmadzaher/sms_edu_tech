@@ -1,0 +1,31 @@
+
+@font-face {
+    font-family: 'Cairo';
+    src: url('../fonts/Cairo/Cairo-Regular.ttf'); /* Legacy iOS */
+}
+body {
+    color: #4d4d4d;
+    font-family: 'Cairo', sans-serif;
+    line-height: 22px;
+    margin: 0;
+    font-size: 14px;
+}
+.header .toggle-sidebar-left {
+    border-radius: 4px;
+    color: #4c4e51;
+    height: 50px;
+    line-height: 50px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 1px;
+    width: 50px;
+    border: 1px solid #e4e4e4;
+}
+html.sidebar-left-sm .sidebar-left ul.nav-main li a {
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+ul.nav-main li a {
+    color: #959595;
+}

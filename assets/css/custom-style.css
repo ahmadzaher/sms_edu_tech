@@ -3,10 +3,7 @@ body {
 	background: #ecedf0;
 	width: 100%;
 }
-@font-face {
-	font-family: 'Cairo';
-	src: url('../fonts/Cairo/Cairo-Regular.ttf'); /* Legacy iOS */
-}
+
 html {
 	font-size: 10px;
 	overflow-x: hidden !important;
@@ -15,7 +12,7 @@ html {
 
 body {
 	color: #4d4d4d;
-	font-family: 'Cairo', sans-serif;
+	font-family: 'Signika', sans-serif;
 	line-height: 22px;
 	margin: 0;
 	font-size: 14px;
