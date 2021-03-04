@@ -96,7 +96,7 @@
 			<li>
 				<a href="<?php echo $webURL; ?>" target="_blank" class="header-menu-icon" data-toggle="tooltip" data-placement="bottom"
 				data-original-title="<?php echo translate('visit_home_page'); ?>">
-					<i class="fas fa-globe"></i>
+					<i class="fas fa-home"></i>
 				</a>
 			</li>
 		<?php } ?>
