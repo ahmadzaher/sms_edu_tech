@@ -174,6 +174,8 @@ class Student extends Admin_Controller
                         if ($i == 0) {
                             $csvData = array_keys($row);
                         }
+
+                        $row['RegisterNo'] = $this->student_model->regSerNumber();
                         $csv_chk = array_diff($columnHeaders, $csvData);
                         if (count($csv_chk) <= 0) {
                             $r = $this->csvCheckExistsData($row['StudentUsername'], $row['Roll'], $row['RegisterNo'], $classID, $branchID);
@@ -614,19 +616,19 @@ class Student extends Admin_Controller
                 return $array;
             }
         }
-        if ($registerno !== '') {
-            $this->db->where('register_no', $registerno);
-            $query = $this->db->get_where('student');
-            if ($query->num_rows() > 0) {
-                $array['status'] = false;
-                $array['message'] = "Student Register No Already Exists.";
-                return $array;
-            }
-        } else {
-            $array['status'] = false;
-            $array['message'] = "Register No Is Required.";
-            return $array; 
-        }
+//        if ($registerno !== '') {
+//            $this->db->where('register_no', $registerno);
+//            $query = $this->db->get_where('student');
+//            if ($query->num_rows() > 0) {
+//                $array['status'] = false;
+//                $array['message'] = "Student Register No Already Exists.";
+//                return $array;
+//            }
+//        } else {
+//            $array['status'] = false;
+//            $array['message'] = "Register No Is Required.";
+//            return $array;
+//        }
 
         $array['status'] = true;
         return $array;
