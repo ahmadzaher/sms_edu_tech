@@ -45,13 +45,13 @@
 							<label class="control-label"><?=translate('day')?> <span class="required">*</span></label>
 							<?php
 								$arrayDay = array(
+									"saturday" => "Saturday",
 									"sunday" => "Sunday",
 									"monday" => "Monday",
 									"tuesday" => "Tuesday",
 									"wednesday" => "Wednesday",
 									"thursday" => "Thursday",
-									"friday" => "Friday",
-									"saturday" => "Saturday"
+									"friday" => "Friday"
 								);
 								echo form_dropdown("day", $arrayDay, set_value('day'), "class='form-control' required
 								data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
@@ -106,6 +106,7 @@
 												'session_id' => get_session_id(),
 												'branch_id' => $branch_id
 											))->result();
+
 											foreach ($subjectAssign as $assign){
 												$arraySubject[$assign->subject_id] = get_type_name_by_id('subject', $assign->subject_id);
 											}

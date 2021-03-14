@@ -93,13 +93,13 @@
 						<tbody>
 						<?php
 						$days = array(
+							'saturday',
 							'sunday',
 							'monday',
 							'tuesday',
 							'wednesday',
 							'thursday',
 							'friday',
-							'saturday'
 						);
 						$mapfunction = function($s) {return $s->day;};
 						$count = array_count_values(array_map($mapfunction, $timetables));
@@ -157,13 +157,13 @@
 					<label class="control-label"><?=translate('day')?> <span class="required">*</span></label>
 					<?php
 						$arrayDay = array(
+							"saturday" => "Saturday",
 							"sunday" => "Sunday",
 							"monday" => "Monday",
 							"tuesday" => "Tuesday",
 							"wednesday" => "Wednesday",
 							"thursday" => "Thursday",
 							"friday" => "Friday",
-							"saturday" => "Saturday"
 						);
 						echo form_dropdown("day", $arrayDay, set_value('day'), "class='form-control' required
 						data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
