@@ -190,7 +190,7 @@ $previous_details = json_decode($student['previous_details'], true);
 						</div>
 
 						<div class="row">
-							<div class="col-md-6 mb-sm">
+							<div class="col-md-4 mb-sm">
 								<div class="form-group">
 									<label class="control-label"><?=translate('blood_group')?></label>
 									<?php
@@ -200,7 +200,7 @@ $previous_details = json_decode($student['previous_details'], true);
 									?>
 								</div>
 							</div>
-							<div class="col-md-6 mb-sm">
+							<div class="col-md-4 mb-sm">
 								<div class="form-group">
 									<label class="control-label"><?=translate('birthday')?></label>
 									<div class="input-group">
@@ -210,22 +210,22 @@ $previous_details = json_decode($student['previous_details'], true);
 									</div>
 								</div>
 							</div>
+                            <div class="col-md-4 mb-sm">
+                                <div class="form-group">
+                                    <label class="control-label"><?=translate('mother_tongue')?></label>
+                                    <input type="text" class="form-control" name="mother_tongue" value="<?=set_value('mother_tongue', $student['mother_tongue'])?>" />
+                                </div>
+                            </div>
 						</div>
 
 						<div class="row">
-							<div class="col-md-4 mb-sm">
-								<div class="form-group">
-									<label class="control-label"><?=translate('mother_tongue')?></label>
-									<input type="text" class="form-control" name="mother_tongue" value="<?=set_value('mother_tongue', $student['mother_tongue'])?>" />
-								</div>
-							</div>
-							<div class="col-md-4 mb-sm">
+							<div class="col-md-4 mb-sm hide">
 								<div class="form-group">
 									<label class="control-label"><?=translate('religion')?></label>
 									<input type="text" class="form-control" name="religion" value="<?=set_value('religion', $student['religion'])?>" />
 								</div>
 							</div>
-							<div class="col-md-4 mb-sm">
+							<div class="col-md-4 mb-sm hide">
 								<div class="form-group">
 									<label class="control-label"><?=translate('caste')?></label>
 									<input type="text" class="form-control" name="caste" value="<?=set_value('caste', $student['caste'])?>" />

@@ -135,7 +135,7 @@
 					</div>
 
 					<div class="row">
-						<div class="col-md-4 mb-sm">
+						<div class="col-md-4 mb-sm hide">
 							<div class="form-group">
 								<label class="control-label"><?=translate('religion')?></label>
 								<input type="text" class="form-control" name="religion" value="<?=set_value('religion')?>">
