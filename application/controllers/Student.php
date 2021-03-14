@@ -456,7 +456,9 @@ class Student extends Admin_Controller
                 $get_field = $this->db->where(array('form_to' => 'student', 'branch_id' => $branchID))->get('custom_field')->result_array();
                 $field_id = array_column($get_field, 'id');
                 $this->db->where('relid', $sid);
-                $this->db->where_in('field_id', $field_id);
+                if(is_array($field_id))
+                    if(!empty($field_id))
+                        $this->db->where_in('field_id', $field_id);
                 $this->db->delete('custom_fields_values');
             }
         }
