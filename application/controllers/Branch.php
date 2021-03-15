@@ -298,7 +298,7 @@ class Branch extends Admin_Controller
             $this->db->where('branch_id', $id);
             $student_category_id = '';
             $student_category = $this->db->get('student_category')->row_array();
-            if($student_category_id != '')
+            if(!empty($student_category))
                 $student_category_id = $student_category['id'];
 
             $this->db->where('branch_id', $id);
