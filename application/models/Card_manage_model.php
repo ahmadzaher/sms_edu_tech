@@ -206,7 +206,7 @@ class Card_manage_model extends MY_Model
                     }
                 } else if ($field == 'signature') {
                     if (!empty($templete['signature'])) {
-                        $signature_ph = '<img src="' . base_url('uploads/certificate/' . $templete['signature']) . '">';
+                        $signature_ph = '<img style="max-width:40px; max-height:40px;" src="' . base_url('uploads/certificate/' . $templete['signature']) . '">';
                         $body = str_replace($tag, $signature_ph, $body);
                     }
                 } else if ($field == 'qr_code') {
