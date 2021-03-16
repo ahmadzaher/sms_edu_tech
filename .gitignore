@@ -1,4 +1,5 @@
 application/config/database.php
 system/
+uploads/
 index.php/
 .htaccess
