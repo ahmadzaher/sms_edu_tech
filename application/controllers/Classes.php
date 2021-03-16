@@ -127,8 +127,23 @@ class Classes extends Admin_Controller
             if (!is_superadmin_loggedin()) {
                 $this->db->where('branch_id', get_loggedin_branch_id());
             }
-            $this->db->where('id', $id);
+            $this->db->where('class.id', $id);
+            $this->db->join('enroll', 'enroll.class_id=class.id', 'inner');
+            $this->db->join('student', 'student.id=enroll.student_id', 'inner');
             $this->db->delete('class');
+
+            $this->db->where('class_id', $id);
+            $this->db->join('student', 'student.id=enroll.student_id', 'inner');
+            $students = $this->db->get('enroll')->result_array();
+
+            foreach($students as $student){
+                $this->db->where('id', $student['student_id']);
+                $this->db->delete('student');
+            }
+
+            $this->db->where('class_id', $id);
+            $this->db->delete('enroll');
+
             if ($this->db->affected_rows() > 0) {
                 $this->db->where('class_id', $id);
                 $this->db->delete('sections_allocation');
