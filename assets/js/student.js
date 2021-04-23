@@ -3,6 +3,7 @@
 	$(document).ready(function () {
 		$(document).on('change', '#branch_id', function() {
 			var branchID = $(this).val();
+			
 			$.ajax({
 				url: base_url + "ajax/getLoginAuto",
 				type: 'POST',
@@ -21,6 +22,7 @@
 					}
 				}
 			});
+
 			$.ajax({
 				url: base_url + "ajax/getClassByBranch",
 				type: 'POST',
