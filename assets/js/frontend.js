@@ -19,10 +19,11 @@
 		$('.switch_menu').on("change", function(){
 			var state = $(this).prop('checked');
 			var menu_id = $(this).data('menu-id');
+			console.log(menu_branchID); 
 			$.ajax({
 				type: 'POST',
 				url: base_url + 'frontend/menu/status',
-				data: {'menu_id': menu_id, 'status' : state},
+				data: {'menu_id': menu_id, 'branch_id': menu_branchID, 'status' : state},
 				dataType: "html",
 				success: function(data) {
 					swal({
