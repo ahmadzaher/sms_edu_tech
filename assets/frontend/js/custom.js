@@ -176,7 +176,6 @@
         $(".loader-container").addClass('loader-fadeout');
     });
 
-
     $('#activateSchool').on('change', function(e) {
         var branch_id = $(this).val();
         $.ajax({
@@ -192,7 +191,26 @@
         });
     });
 
+    // GALLERY MAGNIFIC POPUP
+    $('.gallery-grid').magnificPopup({
+        delegate: 'a.zoom', 
+        type: 'image',
+        gallery: {
+            enabled: true
+        }
+    });
 
+    $('.gallery-grid .popup-video').magnificPopup({
+        disableOn: 700,
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: true,
+        fixedContentPos: false,
+        gallery: {
+            enabled: true
+        }
+    });
 })(window.jQuery);
     // Datepicker
     (function($) {
