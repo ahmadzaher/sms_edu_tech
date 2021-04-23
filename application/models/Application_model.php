@@ -205,4 +205,15 @@ class Application_model extends CI_Model
         );
         return $arrayData;
     }
+
+    public function getBranchImage($id = '', $type = 'logo')
+    {
+        $file_path = 'uploads/app_image/' . $type . '-' . $id . '.png';
+        if (file_exists($file_path) && !empty($id)) {
+            $image_url = base_url($file_path);
+        } else {
+            $image_url = base_url("uploads/app_image/$type.png");
+        }
+        return $image_url;
+    }
 }

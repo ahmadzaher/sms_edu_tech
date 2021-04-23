@@ -415,16 +415,18 @@ function web_menu_list($publish = '', $default = '', $branchID = '')
     if (empty($branchID)) {
         $branchID = $CI->home_model->getDefaultBranch();
     }
-    $CI->db->select('*');
+    $CI->db->select('*,if(front_cms_menu_visible.name is null, front_cms_menu.title, front_cms_menu_visible.name) as title');
+    $CI->db->from('front_cms_menu');
+    $CI->db->join('front_cms_menu_visible', 'front_cms_menu_visible.menu_id = front_cms_menu.id and front_cms_menu_visible.branch_id = ' . $branchID, 'left');
     if ($publish != '') {
-        $CI->db->where('publish', $publish);
+        $CI->db->where('front_cms_menu.publish', $publish);
     }
     if ($default != '') {
-        $CI->db->where('system', $default);
+        $CI->db->where('front_cms_menu.system', $default);
     }
-    $CI->db->order_by('ordering', 'asc');
-    $CI->db->where_in('branch_id', array(0, $branchID));
-    $result = $CI->db->get('front_cms_menu')->result_array();
+    $CI->db->order_by('front_cms_menu.ordering', 'asc');
+    $CI->db->where_in('front_cms_menu.branch_id', array(0, $branchID));
+    $result = $CI->db->get()->result_array();
     return $result;
 }
 

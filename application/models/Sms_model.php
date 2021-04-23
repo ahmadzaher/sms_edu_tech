@@ -14,6 +14,7 @@ class Sms_model extends CI_Model
         $this->load->library("msg91");
         $this->load->library("bulk");
         $this->load->library("textlocal");
+        $this->load->library("smscountry");
     }
 
     // common function for sending sms
@@ -162,6 +163,8 @@ class Sms_model extends CI_Model
             $res = $this->msg91->send($receiver, $text);
         } elseif ($sms_api == 5) {
             $res = $this->textlocal->sendSms(array($receiver), $text);
+        } elseif ($sms_api == 6) {
+            $res = $this->smscountry->send($receiver, $text);
         }
     }
 }

@@ -20,6 +20,7 @@ class Subject_model extends MY_Model
         $this->db->join('class as c', 'c.id = sa.class_id', 'left');
         $this->db->join('section as s', 's.id = sa.section_id', 'left');
         $this->db->group_by(array('sa.class_id', 'sa.section_id', 'sa.branch_id'));
+        $this->db->where('sa.session_id', get_session_id());
         if (!is_superadmin_loggedin()) {
             $this->db->where('sa.branch_id', get_loggedin_branch_id());
         }

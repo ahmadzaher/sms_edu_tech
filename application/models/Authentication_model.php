@@ -22,7 +22,6 @@ class Authentication_model extends MY_Model
         return false;
     }
 
-
     // password forgotten
     public function lose_password($username)
     {
@@ -64,4 +63,28 @@ class Authentication_model extends MY_Model
         }
         return false;
     }
+
+    public function urlaliasToBranch($url_alias)
+    {
+        $get = $this->db->select('branch_id')
+        ->where('url_alias', $url_alias)
+        ->get('front_cms_setting')
+        ->row_array();
+        if (empty($url_alias)) {
+            return null;
+        } else {
+            return $get['branch_id'];
+        }
+    }
+
+    public function getSegment($id = '')
+    {
+        $segment = $this->uri->segment($id);
+        if (empty($segment)) {
+            return '';
+        } else {
+            return '/' . $segment;
+        }
+    }
+
 }

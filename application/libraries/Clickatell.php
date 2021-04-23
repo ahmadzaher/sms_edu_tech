@@ -24,6 +24,10 @@ class Clickatell
     // private vars
     private $ci;
     private $session_id = FALSE;
+    private $username;
+    private $password;
+    private $api_id;
+    private $from_no;
 
     const BASEURL = "http://api.clickatell.com";
 

@@ -51,6 +51,7 @@ class Frontend_model extends MY_Model
         $new_tab = isset($data['new_tab']) ? 1 : 0;
         $external_url = isset($data['external_url']) ? 1 : 0;
         $external_link = isset($data['external_link']) ? $data['external_link'] : '';
+        $parent_id = isset($data['parent_id']) ? $data['parent_id'] : 0;
         $menu_data = array(
             'title' => $title,
             'alias' => $slug,
@@ -58,6 +59,7 @@ class Frontend_model extends MY_Model
             'open_new_tab' => $new_tab,
             'ext_url' => $external_url,
             'ext_url_address' => $external_link,
+            'parent_id' => $parent_id,
             'publish' => $publish,
             'branch_id' => $this->application_model->get_branch_id(),
             'system' => 0,
@@ -66,13 +68,26 @@ class Frontend_model extends MY_Model
         if (isset($data['menu_id']) && !empty($data['menu_id'])) {
             $isSystem = $this->db->get_where('front_cms_menu', array('id' => $data['menu_id']))->row()->system;
             if ($isSystem == 1) {
-                unset($menu_data['alias']);
-                unset($menu_data['ext_url']);
-                unset($menu_data['ext_url_address']);
-                unset($menu_data['system']);
+                $branch_id = $this->application_model->get_branch_id();
+                $query = $this->db->select('id')->from("front_cms_menu_visible")->where(array('menu_id' => $data['menu_id'], 'branch_id' => $branch_id))->get();
+                $arraySysMenu = array(
+                    'name' => $title, 
+                    'invisible' => (isset($data['publish']) ? 0 : 1), 
+                    'menu_id' => $data['menu_id'], 
+                    'ordering' => $data['position'], 
+                    'parent_id' => $data['parent_id'], 
+                    'branch_id' => $branch_id, 
+                );
+                if ($query->num_rows() == 0) {
+                    $this->db->insert('front_cms_menu_visible', $arraySysMenu);
+                } else {
+                    $this->db->where('id', $query->row()->id);
+                    $this->db->update('front_cms_menu_visible', $arraySysMenu);
+                }
+            } else {
+                $this->db->where('id', $data['menu_id']);
+                $this->db->update('front_cms_menu', $menu_data);
             }
-            $this->db->where('id', $data['menu_id']);
-            $this->db->update('front_cms_menu', $menu_data);
         } else {
             $this->db->insert('front_cms_menu', $menu_data);
         }
@@ -178,13 +193,33 @@ class Frontend_model extends MY_Model
     }
 
 
-    public function getMenuList()
+    public function getMenuList($branchID = '')
     {
-        $sql = "SELECT front_cms_menu.*, b.name as branch_name FROM front_cms_menu LEFT JOIN branch as b ON b.id = front_cms_menu.branch_id";
-        if (!is_superadmin_loggedin()) {
-            $sql .= " WHERE (branch_id = " . $this->db->escape(get_loggedin_branch_id()) . " OR system != 0)";
+        $mainMenu = array();
+        $subMenu = array();
+        $mergeMenu = array();
+        $this->db->select('front_cms_menu.*,if(mv.name is null, front_cms_menu.title, mv.name) as title, if(mv.parent_id is null, front_cms_menu.parent_id, mv.parent_id) as parent_id, if(mv.ordering is null, front_cms_menu.ordering, mv.ordering) as ordering,mv.invisible');
+        $this->db->from('front_cms_menu');
+        $this->db->join('front_cms_menu_visible as mv', 'mv.menu_id = front_cms_menu.id and mv.branch_id = ' . $branchID, 'left');
+        $this->db->order_by('front_cms_menu.ordering', 'asc');
+        $this->db->where_in('front_cms_menu.branch_id', array(0, $branchID));
+        $result = $this->db->get()->result_array();
+        foreach ($result as $key => $value) {
+            if ($value['parent_id'] == 0) {
+                $mainMenu[$key] = $value;
+            } else {
+                $subMenu[$key] = $value;
+            }
         }
-        $sql .= " ORDER BY front_cms_menu.id ASC";
-        return  $this->db->query($sql)->result_array();
+
+        foreach ($mainMenu as $key => $value) {
+            $mergeMenu[$key] = $value;
+            foreach ($subMenu as $key2 => $value2) {
+                if ($value['id'] == $value2['parent_id']) {
+                    $mergeMenu[$key]['submenu'][$key2] = $value2;
+                }
+            }
+        }
+        return $mergeMenu;
     }
 }

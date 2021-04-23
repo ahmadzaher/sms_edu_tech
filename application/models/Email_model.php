@@ -129,13 +129,15 @@ class Email_model extends CI_Model
 
     public function sentForgotPassword($data)
     {
-        $emailTemplate = $this->db->where(array('template_id' => 2, 'branch_id' => $data['branch_id'] ))->get('email_templates_details')->row_array();
+        $emailTemplate = $this->db->where(array('template_id' => 2, 'branch_id' => $data['branch_id']))->get('email_templates_details')->row_array();
         if ($emailTemplate['notified'] == 1 && !empty($data['email'])) {
             $message = $emailTemplate['template_body'];
             $message = str_replace("{institute_name}", get_global_setting('institute_name'), $message);
             $message = str_replace("{username}", $data['username'] , $message);
             $message = str_replace("{name}", $data['name'], $message);
             $message = str_replace("{reset_url}", $data['reset_url'], $message);
+            $message = str_replace("{email}", $data['email'], $message);
+            $msgData['branch_id'] = $data['branch_id'];
             $msgData['recipient'] = $data['email'];
             $msgData['subject'] = $emailTemplate['subject'];
             $msgData['message'] = $message;
@@ -145,19 +147,23 @@ class Email_model extends CI_Model
 
     public function sendEmail($data)
     {
-        $branchID = $this->application_model->get_branch_id();
-        $getConfig = $this->db->get_where('email_config', array('id' => 1))->row_array();
-        if ($getConfig['protocol'] == 'smtp') {
-            $config = array(
-                'smtp_host'     => trim($getConfig['smtp_host']),
-                'smtp_port'     => trim($getConfig['smtp_port']),
-                'smtp_user'     => trim($getConfig['smtp_user']),
-                'smtp_pass'     => trim($getConfig['smtp_pass']),
-                'smtp_crypto'   => $getConfig['smtp_encryption'],
-            );
+        if (empty($data['branch_id'])) {
+            $branchID = $this->application_model->get_branch_id();
+        } else {
+            $branchID = $data['branch_id'];
         }
-
-        $config['protocol']     = 'smtp';
+        $getConfig = $this->db->get_where('email_config', array('branch_id' => $branchID))->row_array();
+        $config = array();
+        if ($getConfig['protocol'] == 'smtp') {
+            $config['protocol']      = 'smtp';
+            $config['smtp_host']     = trim($getConfig['smtp_host']);
+            $config['smtp_port']     = trim($getConfig['smtp_port']);
+            $config['smtp_user']     = trim($getConfig['smtp_user']);
+            $config['smtp_pass']     = trim($getConfig['smtp_pass']);
+            $config['smtp_crypto']   = $getConfig['smtp_encryption'];
+        } else {
+            $config['protocol'] = 'smtp';
+        }
         $config['useragent']    = "CodeIgniter";
         $config['mailtype']     = "html";
         $config['newline']      = "\r\n";

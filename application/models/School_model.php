@@ -37,6 +37,7 @@ class School_model extends MY_Model
             'grd_username_prefix' => $data['grd_username_prefix'],
             'grd_default_password' => $data['grd_default_password'],
         );
+        
         $this->db->where('id', $data['brance_id']);
         $this->db->update('branch', $arrayBranch);
     }

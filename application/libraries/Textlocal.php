@@ -1,4 +1,4 @@
-<?php
+<?php (! defined('BASEPATH')) and exit('No direct script access allowed');
 
 /**
  * Textlocal API2 Wrapper Class

@@ -25,19 +25,6 @@ class Home_model extends MY_Model
         }
     }
 
-    public function get_doctor_profile($id)
-    {
-        $this->db->select('staff.*,front_cms_doctor_bio.biography,staff_designation.name as designation_name,staff_department.name as department_name');
-        $this->db->from('staff');
-        $this->db->join('staff_designation', 'staff_designation.id = staff.designation', 'left');
-        $this->db->join('staff_department', 'staff_department.id = staff.department', 'left');
-        $this->db->join('front_cms_doctor_bio', 'front_cms_doctor_bio.doctor_id = staff.id', 'left');
-        $this->db->join('login_credential', 'login_credential.user_id = staff.id and login_credential.role != 7', 'inner');
-        $this->db->where('login_credential.role', 3);
-        $this->db->where('login_credential.user_id', $id);
-        return $this->db->get()->row_array();
-    }
-
     public function get_teacher_list($start = '', $branch_id)
     {
         $this->db->select('staff.*,staff_designation.name as designation_name,staff_department.name as department_name');
@@ -71,7 +58,6 @@ class Home_model extends MY_Model
         return $result;
     }
 
-
     public function branch_list() 
     {
         $this->db->select('b.school_name,b.id');
@@ -84,5 +70,107 @@ class Home_model extends MY_Model
             $arrayData[$row->id] = $row->school_name;
         }
         return $arrayData;
+    }
+
+    function menuList($school = '', $branchID = '')
+    {
+        $mainMenu = array();
+        $subMenu = array();
+        $mergeMenu = array();
+        if (empty($branchID)) {
+            $branchID = $this->getDefaultBranch();
+        }
+        $this->db->select('front_cms_menu.*,if(mv.name is null, front_cms_menu.title, mv.name) as title,if(mv.parent_id is null, front_cms_menu.parent_id, mv.parent_id) as parent_id,if(mv.ordering is null, front_cms_menu.ordering, mv.ordering) as ordering,mv.invisible');
+        $this->db->from('front_cms_menu');
+        $this->db->join('front_cms_menu_visible as mv', 'mv.menu_id = front_cms_menu.id and mv.branch_id = ' . $branchID, 'left');
+        $this->db->where('front_cms_menu.publish', 1);
+        $this->db->where_in('front_cms_menu.branch_id', array(0, $branchID));
+        $result = $this->db->get()->result_array();
+        //php array sort
+        array_multisort(array_column($result, 'ordering'), SORT_ASC, SORT_NUMERIC, $result);
+        foreach ($result as $key => $value) {
+            if ($value['invisible'] == 0) {
+                if ($value['parent_id'] == 0) {
+                    $mainMenu[$key] = $value;
+                } else {
+                    $subMenu[$key] = $value;
+                }
+            }
+        }
+
+        foreach ($mainMenu as $key => $value) {
+            $mergeMenu[$key] = $value;
+            $mergeMenu[$key]['url'] = $this->genURL($value, $school);
+            foreach ($subMenu as $key2 => $value2) {
+                if ($value['id'] == $value2['parent_id']) {
+                    $mergeMenu[$key]['submenu'][$key2] = array(
+                        'title' => $value2['title'],
+                        'open_new_tab' => $value2['open_new_tab'],
+                        'url' => $this->genURL($value2, $school)
+                    );
+                }
+            }
+        }
+
+        return $mergeMenu;
+    }
+
+    function genURL($array = array(), $school = '')
+    {
+        $url = "#";
+        if ($school != '')
+            $school = '/' .  $school;
+        if ($array['system'] && $array['alias'] !== 'pages') {
+            $url = base_url('home/' . $array['alias'] . $school);
+        } else {
+            if ($array['ext_url']) {
+                $url = $array['ext_url_address'];
+            } else {
+                $url = base_url('home/page/' . $array['alias'] . $school);
+            }
+        }
+        return $url;
+    }
+
+    function getExamList($branchID = '', $classID = '', $sectionID = '')
+    {
+        $sessionID = get_session_id();
+        $this->db->select('exam.id,exam.name,exam.term_id');
+        $this->db->from('timetable_exam');
+        $this->db->join('exam','exam.id = timetable_exam.exam_id', 'left');
+        if (!empty($classID))
+            $this->db->where('timetable_exam.class_id', $classID);
+        if (!empty($sectionID))
+            $this->db->where('timetable_exam.section_id', $sectionID);
+        $this->db->where('timetable_exam.branch_id', $branchID);
+        $this->db->where('timetable_exam.session_id', $sessionID);
+        $this->db->group_by('timetable_exam.exam_id');
+        $result = $this->db->get()->result_array();
+        return $result;
+    }
+
+    public function getGalleryCategory($branch_id)
+    {
+        $this->db->select('front_cms_gallery_category.id as category_id,front_cms_gallery_category.name as category_name');
+        $this->db->from('front_cms_gallery_category');
+        $this->db->join('front_cms_gallery_content', 'front_cms_gallery_content.category_id = front_cms_gallery_category.id', 'inner');
+        $this->db->where('front_cms_gallery_category.branch_id', $branch_id);
+        $this->db->group_by('front_cms_gallery_category.id');
+        $this->db->where('front_cms_gallery_content.show_web', 1);
+        $this->db->order_by('front_cms_gallery_category.id', 'asc');
+        $result = $this->db->get()->result_array();
+        return $result;
+    }
+
+    public function getGalleryList($branch_id)
+    {
+        $this->db->select('front_cms_gallery_content.*,staff.name as staff_name');
+        $this->db->from('front_cms_gallery_content');
+        $this->db->join('staff', 'staff.id = front_cms_gallery_content.added_by', 'left');
+        $this->db->where('front_cms_gallery_content.branch_id', $branch_id);
+        $this->db->where('front_cms_gallery_content.show_web', 1);
+        $this->db->order_by('front_cms_gallery_content.id', 'asc');
+        $result = $this->db->get()->result_array();
+        return $result;
     }
 }

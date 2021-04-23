@@ -287,7 +287,7 @@ class Card_manage_model extends MY_Model
             } else if ($field == 'exam_name') {
                 $body = str_replace($tag, $this->application_model->exam_name_by_id($exam_id), $body);
             } else if ($field == 'subject_list_table') {
-                $body = str_replace($tag, $this->tableHtml($exam_id, $userDetails['class_id'], $userDetails['section_id']), $body);
+                $body = str_replace($tag, $this->tableHtml($exam_id, $userDetails['class_id'], $userDetails['section_id'], $userDetails['branch_id']), $body);
             } else if ($field == 'logo') {
                 if (!empty($templete['logo'])) {
                     $logo_ph = '<img src="' . base_url('uploads/certificate/' . $templete['logo']) . '">';
@@ -347,10 +347,10 @@ class Card_manage_model extends MY_Model
         return $query->row_array();
     }
 
-    public function tableHtml($examID, $classID, $sectionID)
+    public function tableHtml($examID, $classID, $sectionID, $branchID = '')
     {
         $html = '';
-        $html .= '<table class="table table-bordered table-condensed ">';
+        $html .= '<table class="table table-bordered table-condensed">';
         $html .= '<thead>';
         $html .= '<tr>';
         $html .= '<th>Subject</th>';
@@ -360,7 +360,7 @@ class Card_manage_model extends MY_Model
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
-        $timetables = $this->timetable_model->getExamTimetableByModal($examID, $classID, $sectionID);
+        $timetables = $this->timetable_model->getExamTimetableByModal($examID, $classID, $sectionID, $branchID);
         if (count($timetables->result_array())) {
             foreach ($timetables->result_array() as $row):
                 $html .= '<tr>';
