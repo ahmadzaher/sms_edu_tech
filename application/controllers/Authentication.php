@@ -20,7 +20,7 @@ class Authentication extends Authentication_Controller
     }
 
     /* email is okey lets check the password now */
-    public function index()
+    public function index($url_alias = '')
     {
         if (is_loggedin()) {
             redirect(base_url('dashboard'));
@@ -89,11 +89,12 @@ class Authentication extends Authentication_Controller
 
             }
         }
+        $this->data['branch_id'] = $this->authentication_model->urlaliasToBranch($url_alias);
         $this->load->view('authentication/login', $this->data);
     }
 
     // forgot password
-    public function forgot()
+    public function forgot($url_alias = '')
     {
         if (is_loggedin()) {
             redirect(base_url('dashboard'), 'refresh');
@@ -120,6 +121,7 @@ class Authentication extends Authentication_Controller
                 }
             }
         }
+        $this->data['branch_id'] = $this->authentication_model->urlaliasToBranch($url_alias);
         $this->load->view('authentication/forgot', $this->data);
     }
 

@@ -45,6 +45,14 @@ class Branch extends Admin_Controller
             $this->data['title'] = translate('branch');
             $this->data['sub_page'] = 'branch/add';
             $this->data['main_menu'] = 'branch';
+            $this->data['headerelements'] = array(
+                'css' => array(
+                    'vendor/dropify/css/dropify.min.css',
+                ),
+                'js' => array(
+                    'vendor/dropify/js/dropify.min.js',
+                ),
+            );
             $this->load->view('layout/index', $this->data);
         } else {
             $this->session->set_userdata('last_page', current_url());
@@ -77,6 +85,14 @@ class Branch extends Admin_Controller
             $this->data['title'] = translate('branch');
             $this->data['sub_page'] = 'branch/edit';
             $this->data['main_menu'] = 'branch';
+            $this->data['headerelements'] = array(
+                'css' => array(
+                    'vendor/dropify/css/dropify.min.css',
+                ),
+                'js' => array(
+                    'vendor/dropify/js/dropify.min.js',
+                ),
+            );
             $this->load->view('layout/index', $this->data);
         } else {
             $this->session->set_userdata('last_page', current_url());

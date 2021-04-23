@@ -10,6 +10,7 @@ class Home extends Frontend_Controller
         $this->load->helpers('custom_fields');
         $this->load->model('email_model');
         $this->load->model('testimonial_model');
+        $this->load->model('gallery_model');
     }
 
     public function index()
@@ -117,28 +118,28 @@ class Home extends Frontend_Controller
 
             if ($this->form_validation->run() == true) {
                 $arrayData = array(
-                    'first_name' => $this->input->post('first_name'), 
-                    'last_name' => $this->input->post('last_name'), 
-                    'gender' => $this->input->post('gender'), 
-                    'birthday' => date("Y-m-d", strtotime($this->input->post('birthday'))), 
-                    'mobile_no' => $this->input->post('mobile_no'), 
-                    'email' => $this->input->post('email'), 
-                    'address' => $this->input->post('address'), 
-                    'guardian_name' => $this->input->post('guardian_name'), 
-                    'guardian_relation' => $this->input->post('guardian_relation'), 
-                    'father_name' => $this->input->post('father_name'), 
-                    'mother_name' => $this->input->post('mother_name'), 
-                    'grd_occupation' => $this->input->post('grd_occupation'), 
-                    'grd_income' => $this->input->post('grd_income'), 
-                    'grd_education' => $this->input->post('grd_education'), 
-                    'grd_email' => $this->input->post('grd_email'), 
-                    'grd_mobile_no' => $this->input->post('grd_mobile_no'), 
-                    'grd_address' => $this->input->post('grd_address'), 
-                    'status' => 1, 
-                    'branch_id' => $branchID, 
-                    'class_id' => $this->input->post('class_id'), 
-                    'section_id' => $this->input->post('section_id'), 
-                    'apply_date' => date("Y-m-d H:i:s"), 
+                    'first_name' => $this->input->post('first_name'),
+                    'last_name' => $this->input->post('last_name'),
+                    'gender' => $this->input->post('gender'),
+                    'birthday' => date("Y-m-d", strtotime($this->input->post('birthday'))),
+                    'mobile_no' => $this->input->post('mobile_no'),
+                    'email' => $this->input->post('email'),
+                    'address' => $this->input->post('address'),
+                    'guardian_name' => $this->input->post('guardian_name'),
+                    'guardian_relation' => $this->input->post('guardian_relation'),
+                    'father_name' => $this->input->post('father_name'),
+                    'mother_name' => $this->input->post('mother_name'),
+                    'grd_occupation' => $this->input->post('grd_occupation'),
+                    'grd_income' => $this->input->post('grd_income'),
+                    'grd_education' => $this->input->post('grd_education'),
+                    'grd_email' => $this->input->post('grd_email'),
+                    'grd_mobile_no' => $this->input->post('grd_mobile_no'),
+                    'grd_address' => $this->input->post('grd_address'),
+                    'status' => 1,
+                    'branch_id' => $branchID,
+                    'class_id' => $this->input->post('class_id'),
+                    'section_id' => $this->input->post('section_id'),
+                    'apply_date' => date("Y-m-d H:i:s"),
                 );
                 $this->db->insert('online_admission', $arrayData);
                 $studentID = $this->db->insert_id();
@@ -160,7 +161,7 @@ class Home extends Frontend_Controller
             echo json_encode($array);
             exit();
         }
-        
+
         $this->data['branchID'] = $branchID;
         $this->data['page_data'] = $this->home_model->get('front_cms_admission', array('branch_id' => $branchID), true);
         $this->data['main_contents'] = $this->load->view('home/admission', $this->data, true);
@@ -243,9 +244,182 @@ class Home extends Frontend_Controller
         $this->load->view('home/layout/index', $this->data);
     }
 
-    public function page()
+    public function admit_card()
     {
-        $url = $this->uri->segment(3);
+        $branchID = $this->home_model->getDefaultBranch();
+        $this->data['branchID'] = $branchID;
+        $this->data['page_data'] = $this->home_model->get('front_cms_admitcard', array('branch_id' => $branchID), true);
+        $this->data['main_contents'] = $this->load->view('home/admit_card', $this->data, true);
+        $this->load->view('home/layout/index', $this->data);
+    }
+
+    public function admitCardprintFn()
+    {
+        if ($_POST) {
+            $this->load->model('card_manage_model');
+            $this->load->model('timetable_model');
+            $this->load->library('ciqrcode', array('cacheable' => false));
+            $this->form_validation->set_rules('exam_id', translate('exam'), 'trim|required');
+            $this->form_validation->set_rules('register_no', translate('register_no'), 'trim|required');
+            if ($this->form_validation->run() == true) {
+                //get all QR Code file
+                $files = glob('uploads/qr_code/*');
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file); //delete file
+                    }
+                }
+                $registerNo = $this->input->post('register_no');
+                $userID = $this->db->select('id')->where('register_no', $registerNo)->get('student')->row_array();
+                if (empty($userID)) {
+                    $array = array('status' => '0','error' => "Register No Not Found.");
+                    echo json_encode($array);
+                    exit();
+                }
+                $templateID = $this->input->post('templete_id');
+                if (empty($templateID) || $templateID == 0) {
+                    $array = array('status' => '0','error' => "No Default Template Set.");
+                    echo json_encode($array);
+                    exit();
+                }
+                $this->data['exam_id'] = $this->input->post('exam_id');
+                $this->data['userID'] = $userID;
+                $this->data['template'] = $this->card_manage_model->get('card_templete', array('id' => $templateID), true);
+                $this->data['print_date'] = date('Y-m-d');
+                $card_data = $this->load->view('home/admitCardprintFn', $this->data, true);
+                $array = array('status' => 'success', 'card_data' => $card_data);
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail','error' => $error);
+            }
+            echo json_encode($array);
+        }
+    }
+
+    public function exam_results()
+    {
+        $branchID = $this->home_model->getDefaultBranch();
+        $this->data['branchID'] = $branchID;
+        $this->data['page_data'] = $this->home_model->get('front_cms_exam_results', array('branch_id' => $branchID), true);
+        $this->data['main_contents'] = $this->load->view('home/exam_results', $this->data, true);
+        $this->load->view('home/layout/index', $this->data);
+    }
+
+    public function examResultsPrintFn()
+    {
+        $this->load->model('exam_model');
+        if ($_POST) {
+            $this->form_validation->set_rules('exam_id', translate('exam'), 'trim|required');
+            $this->form_validation->set_rules('register_no', translate('register_no'), 'trim|required');
+            $this->form_validation->set_rules('session_id', translate('academic_year'), 'trim|required');
+            if ($this->form_validation->run() == true) {
+                $sessionID = $this->input->post('session_id');
+                $registerNo = $this->input->post('register_no');
+                $examID = $this->input->post('exam_id');
+                $userID = $this->db->select('id')->where('register_no', $registerNo)->get('student')->row_array();
+                if (empty($userID)) {
+                    $array = array('status' => '0','error' => "Register No Not Found.");
+                    echo json_encode($array);
+                    exit();
+                }
+                $result = $this->exam_model->getStudentReportCard($userID['id'], $examID, $sessionID);
+                if (empty($result['exam'])) {
+                    $array = array('status' => '0','error' => "Exam Results Not Found.");
+                    echo json_encode($array);
+                    exit();
+                }
+                $this->data['result'] = $result;
+                $this->data['sessionID'] = $sessionID;
+                $this->data['userID'] = $userID['id'];
+                $this->data['examID'] = $examID;
+                $this->data['grade_scale'] = $this->input->post('grade_scale');
+                $this->data['attendance'] = $this->input->post('attendance');
+                $this->data['print_date'] = date('Y-m-d');
+                $card_data = $this->load->view('home/reportCard', $this->data, true);
+                $array = array('status' => 'success', 'card_data' => $card_data);
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail','error' => $error);
+            }
+            echo json_encode($array);
+        }
+    }
+
+    public function certificates()
+    {
+        $branchID = $this->home_model->getDefaultBranch();
+        $this->data['branchID'] = $branchID;
+        $this->data['page_data'] = $this->home_model->get('front_cms_certificates', array('branch_id' => $branchID), true);
+        $this->data['main_contents'] = $this->load->view('home/certificates', $this->data, true);
+        $this->load->view('home/layout/index', $this->data);
+    }
+
+    public function certificatesPrintFn()
+    {
+        if ($_POST) {
+            $this->load->model('certificate_model');
+            $this->load->library('ciqrcode', array('cacheable' => false));
+            //get all QR Code file
+            $files = glob('uploads/qr_code/*');
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file); //delete file
+                }
+            }
+
+            $this->form_validation->set_rules('templete_id', translate('certificate'), 'trim|required');
+            $this->form_validation->set_rules('register_no', translate('register_no'), 'trim|required');
+            if ($this->form_validation->run() == true) {
+
+                $registerNo = $this->input->post('register_no');
+                $examID = $this->input->post('exam_id');
+                $userID = $this->db->select('id')->where('register_no', $registerNo)->get('student')->row_array();
+                if (empty($userID)) {
+                    $array = array('status' => '0','error' => "Register No Not Found.");
+                    echo json_encode($array);
+                    exit();
+                }
+
+                $this->data['user_type'] = 1;
+                $templateID = $this->input->post('templete_id');
+                $this->data['template'] = $this->certificate_model->get('certificates_templete', array('id' => $templateID), true);
+                $this->data['userID'] = $userID['id'];
+                $this->data['print_date'] = date('Y-m-d');
+                $card_data = $this->load->view('home/certificatesPrintFn', $this->data, true);
+                $array = array('status' => 'success', 'card_data' => $card_data);
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail','error' => $error);
+            }
+            echo json_encode($array);
+        }
+    }
+
+    public function gallery()
+    {
+        $branchID = $this->home_model->getDefaultBranch();
+        $this->data['branchID'] = $branchID;
+        $this->data['page_data'] = $this->home_model->get('front_cms_gallery', array('branch_id' => $branchID), true);
+        $this->data['category'] = $this->home_model->getGalleryCategory($branchID);
+        $this->data['galleryList'] = $this->home_model->getGalleryList($branchID);
+        $this->data['main_contents'] = $this->load->view('home/gallery', $this->data, true);
+        $this->load->view('home/layout/index', $this->data);
+    }
+
+    public function gallery_view($alias = '')
+    {
+        $branchID = $this->home_model->getDefaultBranch();
+        $this->data['branchID'] = $branchID;
+        $this->data['page_data'] = $this->home_model->get('front_cms_gallery', array('branch_id' => $branchID), true);
+        $this->data['gallery'] = $this->home_model->get('front_cms_gallery_content', array('branch_id' => $branchID, 'alias' => $alias), true);
+        $this->data['category'] = $this->home_model->getGalleryCategory($branchID);
+        $this->data['galleryList'] = $this->home_model->getGalleryList($branchID);
+        $this->data['main_contents'] = $this->load->view('home/gallery_view', $this->data, true);
+        $this->load->view('home/layout/index', $this->data);
+    }
+
+    public function page($url = '')
+    {
         $this->db->select('front_cms_menu.title as menu_title,front_cms_menu.alias,front_cms_pages.*');
         $this->db->from('front_cms_menu');
         $this->db->join('front_cms_pages', 'front_cms_pages.menu_id = front_cms_menu.id', 'inner');
@@ -266,11 +440,11 @@ class Home extends Frontend_Controller
         $html = "";
         $classID = $this->input->post("class_id");
         if (!empty($classID)) {
-                $result = $this->db->select('sections_allocation.section_id,section.name')
-                    ->from('sections_allocation')
-                    ->join('section', 'section.id = sections_allocation.section_id', 'left')
-                    ->where('sections_allocation.class_id', $classID)
-                    ->get()->result_array();
+            $result = $this->db->select('sections_allocation.section_id,section.name')
+                ->from('sections_allocation')
+                ->join('section', 'section.id = sections_allocation.section_id', 'left')
+                ->where('sections_allocation.class_id', $classID)
+                ->get()->result_array();
             if (is_array($result) && count($result)) {
                 $html .= '<option value="">' . translate('select') . '</option>';
                 foreach ($result as $row) {

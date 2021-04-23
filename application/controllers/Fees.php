@@ -402,6 +402,9 @@ class Fees extends Admin_Controller
         }
         if (isset($_POST['save'])) {
             $student_array = $this->input->post('stu_operations');
+            $student_ids = $this->input->post('student_ids');
+            $student_sel_array = isset($student_array) ? $student_array : array();
+            $delStudent = array_diff($student_ids, $student_sel_array);
             $fee_groupID = $this->input->post('fee_group_id');
             foreach ($student_array as $key => $value) {
                 $arrayData = array(
@@ -416,12 +419,12 @@ class Fees extends Admin_Controller
                     $this->db->insert('fee_allocation', $arrayData);
                 }
             }
-            if (!empty($student_array)) {
-                $this->db->where_not_in('student_id', $student_array);
+            if (!empty($delStudent)) {
+                $this->db->where_in('student_id', $delStudent);
+                $this->db->where('group_id', $fee_groupID);
+                $this->db->where('session_id', get_session_id());
+                $this->db->delete('fee_allocation');
             }
-            $this->db->where('group_id', $fee_groupID);
-            $this->db->where('session_id', get_session_id());
-            $this->db->delete('fee_allocation');
             set_alert('success', translate('information_has_been_saved_successfully'));
             redirect(base_url('fees/allocation'));
         }
@@ -430,6 +433,46 @@ class Fees extends Admin_Controller
         $this->data['sub_page'] = 'fees/allocation';
         $this->data['main_menu'] = 'fees';
         $this->load->view('layout/index', $this->data);
+    }
+
+    public function allocation_save()
+    {
+        if (!get_permission('fees_allocation', 'is_add')) {
+            access_denied();
+        }
+        if ($_POST) {
+            $branchID = $this->application_model->get_branch_id();
+            $student_array = $this->input->post('stu_operations');
+            $student_ids = $this->input->post('student_ids');
+            $student_sel_array = isset($student_array) ? $student_array : array();
+            $delStudent = array_diff($student_ids, $student_sel_array);
+            $fee_groupID = $this->input->post('fee_group_id');
+            if (!empty($student_sel_array)) {
+                foreach ($student_array as $key => $value) {
+                    $arrayData = array(
+                        'student_id' => $value,
+                        'group_id' => $fee_groupID,
+                        'session_id' => get_session_id(),
+                        'branch_id' => $branchID,
+                    );
+                    $this->db->where($arrayData);
+                    $q = $this->db->get('fee_allocation');
+                    if ($q->num_rows() == 0) {
+                        $this->db->insert('fee_allocation', $arrayData);
+                    }
+                }
+            }
+            if (!empty($delStudent)) {
+                $this->db->where_in('student_id', $delStudent);
+                $this->db->where('group_id', $fee_groupID);
+                $this->db->where('session_id', get_session_id());
+                $this->db->delete('fee_allocation');
+            }
+
+            $message = translate('information_has_been_saved_successfully');
+            $array = array('status' => 'success', 'message' => $message);
+            echo json_encode($array);
+        }
     }
 
     /* student fees invoice search user interface */
@@ -497,7 +540,7 @@ class Fees extends Admin_Controller
         if ($_POST) {
             $this->data['student_array'] = $this->input->post('student_id');
             echo $this->load->view('fees/invoicePrint', $this->data, true);
-        }  
+        }
     }
 
     public function due_invoice()
@@ -551,7 +594,7 @@ class Fees extends Admin_Controller
                 'date' => $date,
             );
             $this->db->insert('fee_payment_history', $arrayFees);
-            
+
             // transaction voucher save function
             if (isset($_POST['account_id'])) {
                 $arrayTransaction = array(
@@ -565,9 +608,9 @@ class Fees extends Admin_Controller
             // send payment confirmation sms
             if (isset($_POST['guardian_sms'])) {
                 $arrayData = array(
-                    'student_id' => $this->input->post('student_id'), 
-                    'amount' => $amount, 
-                    'paid_date' => $date, 
+                    'student_id' => $this->input->post('student_id'),
+                    'amount' => $amount,
+                    'paid_date' => $date,
                 );
                 $this->sms_model->send_sms($arrayData, 2);
             }
@@ -609,12 +652,12 @@ class Fees extends Admin_Controller
                 $html .= "<option value=''>" . translate('select') . "</option>";
                 foreach ($result as $row) {
                     $html .= '<optgroup label="' . $row['name'] . '">';
-                        $this->db->where('fee_groups_id', $row['id']);
-                        $resultdetails = $this->db->get('fee_groups_details')->result_array();
-                        foreach ($resultdetails as $t) {
-                            $sel = ($t['fee_groups_id'] . "|" . $t['fee_type_id'] == $typeID ? 'selected' : '');
-                            $html .= '<option value="' . $t['fee_groups_id'] . "|" . $t['fee_type_id'] . '"' . $sel . '>' . get_type_name_by_id('fees_type', $t['fee_type_id']) . '</option>';
-                        }
+                    $this->db->where('fee_groups_id', $row['id']);
+                    $resultdetails = $this->db->get('fee_groups_details')->result_array();
+                    foreach ($resultdetails as $t) {
+                        $sel = ($t['fee_groups_id'] . "|" . $t['fee_type_id'] == $typeID ? 'selected' : '');
+                        $html .= '<option value="' . $t['fee_groups_id'] . "|" . $t['fee_type_id'] . '"' . $sel . '>' . get_type_name_by_id('fees_type', $t['fee_type_id']) . '</option>';
+                    }
                     $html .= '</optgroup>';
                 }
             } else {
@@ -632,8 +675,8 @@ class Fees extends Admin_Controller
         $branch_id = $this->application_model->get_branch_id();
         if (!empty($branch_id)) {
             $result = $this->db->select('id,name')
-            ->where(array('branch_id' => $branch_id, 'session_id' => get_session_id()))
-            ->get('fee_groups')->result_array();
+                ->where(array('branch_id' => $branch_id, 'session_id' => get_session_id()))
+                ->get('fee_groups')->result_array();
             if (count($result)) {
                 $html .= "<option value=''>" . translate('select') . "</option>";
                 foreach ($result as $row) {
@@ -681,7 +724,7 @@ class Fees extends Admin_Controller
         }
         $this->form_validation->set_rules('frequency', translate('frequency'), 'trim|required');
         $this->form_validation->set_rules('days', translate('days'), 'trim|required|numeric');
-        $this->form_validation->set_rules('message', translate('message'), 'trim|required'); 
+        $this->form_validation->set_rules('message', translate('message'), 'trim|required');
     }
 
     public function reminder()
@@ -867,5 +910,89 @@ class Fees extends Admin_Controller
         );
         $this->load->view('layout/index', $this->data);
     }
+
+    public function paymentRevert()
+    {
+        if (!get_permission('fees_revert', 'is_delete')) {
+            $array  = array('status' => 'error', 'message' => translate('access_denied'));
+            echo json_encode($array);
+            exit();
+        }
+        $array  = array('status' => 'success', 'message' => translate('information_deleted'));
+        $ids = $this->input->post('id');
+        foreach ($ids as $key => $value) {
+            $this->db->where('id', $value);
+            $this->db->delete('fee_payment_history');
+        }
+        echo json_encode($array);
+    }
+
+
+    public function fee_fully_paid()
+    {
+        if (!get_permission('collect_fees', 'is_add')) {
+            ajax_access_denied();
+        }
+        $this->form_validation->set_rules('date', translate('date'), 'trim|required');
+        $this->form_validation->set_rules('pay_via', translate('payment_method'), 'trim|required');
+        if ($this->form_validation->run() !== false) {
+            $date = $this->input->post('date');
+            $payVia = $this->input->post('pay_via');
+            $invoiceID = $this->input->post('invoice_id');
+
+            $allocations = $this->fees_model->getInvoiceDetails($invoiceID);
+            $totalBalance = 0;
+            $totalFine= 0;
+
+            foreach ($allocations as $row) {
+                $fine = $this->fees_model->feeFineCalculation($row['allocation_id'], $row['fee_type_id']);
+                $b = $this->fees_model->getBalance($row['allocation_id'], $row['fee_type_id']);
+                $fine = abs($fine - $b['fine']);
+                if ($b['balance'] != 0) {
+                    $totalBalance += $b['balance'];
+                    $totalFine += $fine;
+                    $arrayFees = array(
+                        'allocation_id' => $row['allocation_id'],
+                        'type_id' => $row['fee_type_id'],
+                        'collect_by' => get_loggedin_user_id(),
+                        'amount' => $b['balance'],
+                        'discount' => 0,
+                        'fine' => $fine,
+                        'pay_via' => $payVia,
+                        'remarks' => $this->input->post('remarks'),
+                        'date' => $date,
+                    );
+                    $this->db->insert('fee_payment_history', $arrayFees);
+                }
+            }
+
+            // transaction voucher save function
+            if (isset($_POST['account_id'])) {
+                $arrayTransaction = array(
+                    'account_id' => $this->input->post('account_id'),
+                    'amount' => ($totalBalance + $totalFine),
+                    'date' => $date,
+                );
+                $this->fees_model->saveTransaction($arrayTransaction);
+            }
+
+            // send payment confirmation sms
+            if (isset($_POST['guardian_sms'])) {
+                $arrayData = array(
+                    'student_id' => $this->input->post('student_id'),
+                    'amount' => ($totalBalance + $totalFine),
+                    'paid_date' => $date,
+                );
+                $this->sms_model->send_sms($arrayData, 2);
+            }
+            set_alert('success', translate('information_has_been_saved_successfully'));
+            $array = array('status' => 'success');
+        } else {
+            $error = $this->form_validation->error_array();
+            $array = array('status' => 'fail', 'url' => '', 'error' => $error);
+        }
+        echo json_encode($array);
+    }
+
 
 }
