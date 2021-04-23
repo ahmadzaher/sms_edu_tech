@@ -38,7 +38,9 @@ class Menu extends Admin_Controller
         if (!get_permission('frontend_menu', 'is_view')) {
             access_denied();
         }
+        $branchID = $this->frontend_model->getBranchID();
         if ($this->input->post()) {
+
             if (!get_permission('frontend_menu', 'is_add')) {
                 access_denied();
             }
@@ -55,8 +57,14 @@ class Menu extends Admin_Controller
             echo json_encode($array);
             exit();
         }
-
-        $this->data['menulist'] = $this->frontend_model->getMenuList();
+        
+        $this->data['branch_id'] = $branchID;
+        $this->data['headerelements'] = array(
+            'js' => array(
+                'js/frontend.js',
+                'vendor/jquery-nestable/jquery-nestable.js',
+            ),
+        );
         $this->data['title'] = translate('frontend');
         $this->data['sub_page'] = 'frontend/menu';
         $this->data['main_menu'] = 'frontend';
@@ -85,7 +93,7 @@ class Menu extends Admin_Controller
             exit();
         }
 
-        $this->data['menu'] = $this->app_lib->getTable('front_cms_menu', array('t.id' => $id), true);
+        $this->data['menu'] = $this->app_lib->get_table('front_cms_menu', $id, true);
         $this->data['title'] = translate('frontend');
         $this->data['sub_page'] = 'frontend/menu_edit';
         $this->data['main_menu'] = 'frontend';
@@ -108,15 +116,49 @@ class Menu extends Admin_Controller
 
         $id = $this->input->post('menu_id');
         $status = $this->input->post('status');
-        if ($status == 'true') {
-            $array_data['publish'] = 1;
-            $message = translate('published_on_website');
+        $branch_id = $this->application_model->get_branch_id();
+        $getMenu = $this->db->select('system')
+        ->from("front_cms_menu")
+        ->where('id', $id)
+        ->get()->row_array();
+        if ($getMenu['system']) {
+            if ($status == 'true') {
+                $array_data['invisible'] = 0;
+                $message = translate('published_on_website');
+            } else {
+                $array_data['invisible'] = 1;
+                $message = translate('unpublished_on_website');
+            }
+
+            $query = $this->db->select('id')
+            ->from("front_cms_menu_visible")
+            ->where(array('menu_id' => $id, 'branch_id' => $branch_id))
+            ->get();
+
+            if ($query->num_rows() == 0) {
+                $array_data['parent_id'] = null;
+                $array_data['ordering'] = null;
+                $array_data['name'] = null;
+                $array_data['menu_id'] = $id;
+                $array_data['branch_id'] = $branch_id;
+                $this->db->insert('front_cms_menu_visible', $array_data);
+            } else {
+                $this->db->where('id', $query->row()->id);
+                $this->db->update('front_cms_menu_visible', $array_data);
+            }
         } else {
-            $array_data['publish'] = 0;
-            $message = translate('unpublished_on_website');
+            if ($status == 'true') {
+                $array_data['publish'] = 1;
+                $message = translate('published_on_website');
+            } else {
+                $array_data['publish'] = 0;
+                $message = translate('unpublished_on_website');
+            }
+            $this->db->where('id', $id);
+            $this->db->update('front_cms_menu', $array_data); 
         }
-        $this->db->where('id', $id);
-        $this->db->update('front_cms_menu', $array_data);
+
+
         echo $message;
     }
 

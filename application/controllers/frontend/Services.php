@@ -46,7 +46,7 @@ class Services extends Admin_Controller
         }
 
         $this->data['serviceslist'] = $this->app_lib->getTable('front_cms_services_list');
-        $this->data['title'] = translate('service');
+        $this->data['title'] = translate('frontend');
         $this->data['sub_page'] = 'frontend/services';
         $this->data['main_menu'] = 'frontend';
         $this->load->view('layout/index', $this->data);

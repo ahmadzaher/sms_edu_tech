@@ -42,7 +42,7 @@ class Faq extends Admin_Controller
             ),
         );
         $this->data['faqlist'] = $this->app_lib->getTable('front_cms_faq_list');
-        $this->data['title'] = translate('faq');
+        $this->data['title'] = translate('frontend');
         $this->data['sub_page'] = 'frontend/faq';
         $this->data['main_menu'] = 'frontend';
         $this->load->view('layout/index', $this->data);

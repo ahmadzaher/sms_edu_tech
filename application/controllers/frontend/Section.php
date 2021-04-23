@@ -861,4 +861,181 @@ class Section extends Admin_Controller
             $this->db->insert('front_cms_home', $data);
         }
     }
+
+    public function admit_card()
+    {
+        $branchID = $this->frontend_model->getBranchID();
+        if ($_POST) {
+            if (!get_permission('frontend_section', 'is_add')) {
+                ajax_access_denied();
+            }
+            $this->form_validation->set_rules('page_title', 'Page Title', 'trim|required');
+            $this->form_validation->set_rules('photo', 'Photo', 'trim|callback_check_image');
+            $this->form_validation->set_rules('templete_id', 'Default Template', 'trim|required');
+            if ($this->form_validation->run() == true) {
+                // save information in the database
+                $arrayData = array(
+                    'branch_id' => $branchID,
+                    'page_title' => $this->input->post('page_title'),
+                    'templete_id' => $this->input->post('templete_id'),
+                    'meta_description' => $this->input->post('meta_description'),
+                    'meta_keyword' => $this->input->post('meta_keyword'),
+                    'banner_image' => $this->uploadImage('admit_card' . $branchID, 'banners'),
+                );
+                $this->db->where('branch_id', $branchID);
+                $get = $this->db->get('front_cms_admitcard');
+                if ($get->num_rows() > 0) {
+                    $this->db->where('id', $get->row()->id);
+                    $this->db->update('front_cms_admitcard', $arrayData);
+                } else {
+                    $this->db->insert('front_cms_admitcard', $arrayData);
+                }
+                set_alert('success', translate('information_has_been_saved_successfully'));
+                $array = array('status' => 'success');
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail', 'error' => $error); 
+            }
+            echo json_encode($array);
+            exit();
+        }
+        $this->data['branch_id']    = $branchID;
+        $this->data['admitcard']    = $this->frontend_model->get('front_cms_admitcard', array('branch_id' => $branchID), true);
+        $this->data['title']        = translate('website_page');
+        $this->data['sub_page']     = 'frontend/section_admit_card';
+        $this->data['main_menu']    = 'frontend';
+        $this->load->view('layout/index', $this->data);
+    }
+
+    public function exam_results()
+    {
+        $branchID = $this->frontend_model->getBranchID();
+        if ($_POST) {
+            if (!get_permission('frontend_section', 'is_add')) {
+                ajax_access_denied();
+            }
+            $this->form_validation->set_rules('page_title', 'Page Title', 'trim|required');
+            $this->form_validation->set_rules('photo', 'Photo', 'trim|callback_check_image');
+            if ($this->form_validation->run() == true) {
+                // save information in the database
+                $arrayData = array(
+                    'branch_id' => $branchID,
+                    'page_title' => $this->input->post('page_title'),
+                    'grade_scale' => isset($_POST['grade_scale']) ? 1 : 0,
+                    'attendance' => isset($_POST['attendance']) ? 1 : 0,
+                    'meta_description' => $this->input->post('meta_description'),
+                    'meta_keyword' => $this->input->post('meta_keyword'),
+                    'banner_image' => $this->uploadImage('exam_results' . $branchID, 'banners'),
+                );
+                $this->db->where('branch_id', $branchID);
+                $get = $this->db->get('front_cms_exam_results');
+                if ($get->num_rows() > 0) {
+                    $this->db->where('id', $get->row()->id);
+                    $this->db->update('front_cms_exam_results', $arrayData);
+                } else {
+                    $this->db->insert('front_cms_exam_results', $arrayData);
+                }
+                set_alert('success', translate('information_has_been_saved_successfully'));
+                $array = array('status' => 'success');
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail', 'error' => $error); 
+            }
+            echo json_encode($array);
+            exit();
+        }
+        $this->data['branch_id']    = $branchID;
+        $this->data['admitcard']    = $this->frontend_model->get('front_cms_exam_results', array('branch_id' => $branchID), true);
+        $this->data['title']        = translate('website_page');
+        $this->data['sub_page']     = 'frontend/section_exam_results';
+        $this->data['main_menu']    = 'frontend';
+        $this->load->view('layout/index', $this->data);
+    }
+
+    public function gallery()
+    {
+        $branchID = $this->frontend_model->getBranchID();
+        if ($_POST) {
+            if (!get_permission('frontend_section', 'is_add')) {
+                ajax_access_denied();
+            }
+            $this->form_validation->set_rules('page_title', 'Page Title', 'trim|required');
+            $this->form_validation->set_rules('photo', 'Photo', 'trim|callback_check_image');
+            if ($this->form_validation->run() == true) {
+                // save information in the database
+                $arrayData = array(
+                    'branch_id' => $branchID,
+                    'page_title' => $this->input->post('page_title'),
+                    'meta_description' => $this->input->post('meta_description'),
+                    'meta_keyword' => $this->input->post('meta_keyword'),
+                    'banner_image' => $this->uploadImage('gallery' . $branchID, 'banners'),
+                );
+                $this->db->where('branch_id', $branchID);
+                $get = $this->db->get('front_cms_gallery');
+                if ($get->num_rows() > 0) {
+                    $this->db->where('id', $get->row()->id);
+                    $this->db->update('front_cms_gallery', $arrayData);
+                } else {
+                    $this->db->insert('front_cms_gallery', $arrayData);
+                }
+                set_alert('success', translate('information_has_been_saved_successfully'));
+                $array = array('status' => 'success');
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail', 'error' => $error); 
+            }
+            echo json_encode($array);
+            exit();
+        }
+        $this->data['branch_id']    = $branchID;
+        $this->data['admitcard']    = $this->frontend_model->get('front_cms_gallery', array('branch_id' => $branchID), true);
+        $this->data['title']        = translate('website_page');
+        $this->data['sub_page']     = 'frontend/section_gallery';
+        $this->data['main_menu']    = 'frontend';
+        $this->load->view('layout/index', $this->data);
+    }
+
+    public function certificates()
+    {
+        $branchID = $this->frontend_model->getBranchID();
+        if ($_POST) {
+            if (!get_permission('frontend_section', 'is_add')) {
+                ajax_access_denied();
+            }
+            $this->form_validation->set_rules('page_title', 'Page Title', 'trim|required');
+            $this->form_validation->set_rules('photo', 'Photo', 'trim|callback_check_image');
+            if ($this->form_validation->run() == true) {
+                // save information in the database
+                $arrayData = array(
+                    'branch_id' => $branchID,
+                    'page_title' => $this->input->post('page_title'),
+                    'meta_description' => $this->input->post('meta_description'),
+                    'meta_keyword' => $this->input->post('meta_keyword'),
+                    'banner_image' => $this->uploadImage('certificates' . $branchID, 'banners'),
+                );
+                $this->db->where('branch_id', $branchID);
+                $get = $this->db->get('front_cms_certificates');
+                if ($get->num_rows() > 0) {
+                    $this->db->where('id', $get->row()->id);
+                    $this->db->update('front_cms_certificates', $arrayData);
+                } else {
+                    $this->db->insert('front_cms_certificates', $arrayData);
+                }
+                set_alert('success', translate('information_has_been_saved_successfully'));
+                $array = array('status' => 'success');
+            } else {
+                $error = $this->form_validation->error_array();
+                $array = array('status' => 'fail', 'error' => $error); 
+            }
+            echo json_encode($array);
+            exit();
+        }
+        $this->data['branch_id']    = $branchID;
+        $this->data['admitcard']    = $this->frontend_model->get('front_cms_certificates', array('branch_id' => $branchID), true);
+        $this->data['title']        = translate('website_page');
+        $this->data['sub_page']     = 'frontend/section_certificates';
+        $this->data['main_menu']    = 'frontend';
+        $this->load->view('layout/index', $this->data);
+    }
+
 }

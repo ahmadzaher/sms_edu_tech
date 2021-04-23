@@ -36,7 +36,7 @@ class Features extends Admin_Controller
         }
 
         $this->data['featureslist'] = $this->app_lib->getTable('front_cms_home', array('t.item_type' => 'features'));
-        $this->data['title'] = translate('features');
+        $this->data['title'] = translate('frontend');
         $this->data['sub_page'] = 'frontend/features';
         $this->data['main_menu'] = 'frontend';
         $this->load->view('layout/index', $this->data);
