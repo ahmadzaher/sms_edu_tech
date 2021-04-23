@@ -19,8 +19,10 @@
 	<!-- sweetalert js/css -->
 	<link rel="stylesheet" href="<?php echo base_url('assets/vendor/sweetalert/sweetalert-custom.css');?>">
 	<script src="<?php echo base_url('assets/vendor/sweetalert/sweetalert.min.js');?>"></script>
-	<!-- login page style css -->
-	<link rel="stylesheet" href="<?php echo base_url('assets/login_page/css/style.css');?>">
+    <!-- login page style css -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/login_page/css/style.css');?>">
+    <!-- login page custom style css -->
+    <link rel="stylesheet" href="<?php echo base_url('assets/login_page/css/custom.css');?>">
 	<script type="text/javascript">
 		var base_url = '<?php echo base_url() ?>';
 	</script>
@@ -30,7 +32,7 @@
             <div class="container">
                 <div class="slideIn">
                     <!-- image and information -->
-                    <div class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-12 col-xs-12 no-padding fitxt-center">
+                    <div id="login-social" class="col-lg-4 col-lg-offset-1 col-md-4 col-md-offset-1 col-sm-12 col-xs-12 no-padding fitxt-center">
                         <div class="image-area">
                         <div class="content">
                             <div class="image-hader">
