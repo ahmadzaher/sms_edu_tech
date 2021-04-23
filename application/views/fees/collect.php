@@ -33,7 +33,7 @@
 										<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="RamomCoder Img" />
 									</div>
 								</div>
-								<div class="col-md-6 text-right">
+								<div class="col-md-6 text-right invoice_info">
 									<h4 class="mt-none mb-none text-dark">Invoice No #<?=$invoice['invoice_no']?></h4>
 									<p class="mb-none">
 										<span class="text-dark"><?=translate('date')?> : </span>
@@ -96,12 +96,12 @@
 									<tr class="text-dark">
 										<th id="cell-id" class="text-weight-semibold">#</th>
 										<th id="cell-item" class="text-weight-semibold"><?=translate("fees_type")?></th>
-										<th id="cell-id" class="text-weight-semibold"><?=translate("due_date")?></th>
-										<th id="cell-price" class="text-weight-semibold"><?=translate("status")?></th>
-										<th id="cell-price" class="text-weight-semibold"><?=translate("amount")?></th>
-										<th id="cell-price" class="text-weight-semibold"><?=translate("discount")?></th>
-										<th id="cell-price" class="text-weight-semibold"><?=translate("fine")?></th>
-										<th id="cell-price" class="text-weight-semibold"><?=translate("paid")?></th>
+										<th id="cell-id" class="text-center text-weight-semibold"><?=translate("due_date")?></th>
+										<th id="cell-price" class="text-center text-weight-semibold"><?=translate("status")?></th>
+										<th id="cell-price" class="text-center text-weight-semibold"><?=translate("amount")?></th>
+										<th id="cell-price" class="text-center text-weight-semibold"><?=translate("discount")?></th>
+										<th id="cell-price" class="text-center text-weight-semibold"><?=translate("fine")?></th>
+										<th id="cell-price" class="text-center text-weight-semibold"><?=translate("paid")?></th>
 										<th id="cell-total" class="text-center text-weight-semibold"><?=translate("balance")?></th>
 									</tr>
 								</thead>
@@ -155,10 +155,10 @@
 											}
 											echo "<span class='label ".$labelmode." '>".$status."</span>";
 										?></td>
-										<td><?php echo $currency_symbol . $row['amount'];?></td>
-										<td><?php echo $currency_symbol . $type_discount;?></td>
-										<td><?php echo $currency_symbol . $type_fine;?></td>
-										<td><?php echo $currency_symbol . $type_amount;?></td>
+										<td class="text-center"><?php echo $currency_symbol . $row['amount'];?></td>
+										<td class="text-center"><?php echo $currency_symbol . $type_discount;?></td>
+										<td class="text-center"><?php echo $currency_symbol . $type_fine;?></td>
+										<td class="text-center"><?php echo $currency_symbol . $type_amount;?></td>
 										<td class="text-center"><?php echo $currency_symbol . number_format($balance, 2, '.', '');?></td>
 									</tr>
 									<?php } ?>
@@ -174,21 +174,10 @@
 										<li><strong><?=translate('discount')?> :</strong> <?=$currency_symbol . number_format($total_discount, 2, '.', ''); ?></li>
 										<li><strong><?=translate('fine')?> :</strong> <?=$currency_symbol . number_format($total_fine, 2, '.', ''); ?></li>
 										<?php if ($total_balance != 0): ?>
-										<li>
-											<strong><?=translate('balance')?> : </strong> 
-											<?php
-											$f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-											echo $currency_symbol . number_format($total_balance, 2, '.', '') . ' </br>( ' . ucwords($f->format($total_balance)) . ' )' ;
-											?>
+                                            <li><strong><?=translate('balance')?> :</strong> <?=$currency_symbol . number_format($total_balance, 2, '.', ''); ?></li>
 										</li>
 										<?php else: ?>
-										<li>
-											<strong><?=translate('total_paid')?> : </strong> 
-											<?php
-											$f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-											echo $currency_symbol . number_format(($total_paid + $total_fine), 2, '.', '') . ' </br>( ' . ucwords($f->format(($total_paid + $total_fine))) . ' )' ;
-											?>
-										</li>
+                                            <li><strong><?=translate('total_paid')?> :</strong> <?=$currency_symbol . number_format(($total_paid + $total_fine), 2, '.', ''); ?></li>
 										<?php endif; ?>
 									</ul>
 								</div>
@@ -211,7 +200,7 @@
 										<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="RamomCoder Img" />
 									</div>
 								</div>
-								<div class="col-md-6 text-right">
+								<div class="col-md-6 text-right invoce_info">
 									<h4 class="mt-none mb-none text-dark">Invoice No #<?= $invoice['invoice_no']?></h4>
 									<p class="mb-none">
 										<span class="text-dark"><?=translate('date')?> : </span>

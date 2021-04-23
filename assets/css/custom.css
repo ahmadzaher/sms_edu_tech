@@ -36,3 +36,6 @@ html.dark body {
 html.dark .text-muted {
     color: #a8acba !important;
 }
+.invoice_info{
+    font-size: 12px;
+}
