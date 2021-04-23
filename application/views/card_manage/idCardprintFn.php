@@ -37,10 +37,11 @@
 		}
 </style>
 <?php
+if (is_array($user_array)) {
 if (count($user_array)) {
 	foreach ($user_array as $sc => $userID) {
 	?>
 <div class="certificate">
 	<?=$this->card_manage_model->tagsReplace($user_type, $userID, $template, $print_date, $expiry_date)?>
 </div>
-<?php } } ?>
+<?php } } } ?>
