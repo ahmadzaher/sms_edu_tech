@@ -82,17 +82,35 @@
 							<span class="error"></span>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-md-3 control-label"><?=translate('section')?> <span class="required">*</span></label>
-						<div class="col-md-6">
-							<?php
-								$arraySection = $this->app_lib->getSections(set_value('class_id'));
-								echo form_dropdown("section_id", $arraySection, set_value('section_id'), "class='form-control' id='section_id' 
-								data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
-							?>
-							<span class="error"></span>
-						</div>
-					</div>
+<!--					<div class="form-group">-->
+<!--						<label class="col-md-3 control-label">--><?//=translate('')?><!-- <span class="required">*</span></label>-->
+<!--						<div class="col-md-6">-->
+<!--							--><?php
+//								$arraySection = $this->app_lib->getSections(set_value('class_id'));
+//								echo form_dropdown("section_id", $arraySection, set_value('section_id'), "class='form-control' id='section_id'
+//								data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
+//							?>
+<!--							<span class="error"></span>-->
+<!--						</div>-->
+<!--					</div>-->
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label"><?=translate('section')?> <span class="required">*</span></label>
+                    <div class="col-md-6 mb-md">
+                        <select name="sections[]" class="form-control" data-plugin-selectTwo multiple id='section_holder' data-width="100%"
+                                data-plugin-options='{"placeholder": "<?=translate('select_multiple_subject')?>"}'>
+                            <?php
+                            if(!empty($branch_id)):
+                                $subjects = $this->app_lib->getSections(set_value('class_id'));
+                                foreach ($subjects as $subject):
+                                    ?>
+                                    <option value="<?=$subject->id?>" <?=set_select('sections[]', $subject->id)?>><?=html_escape($subject->name)?></option>
+                                <?php endforeach; endif;?>
+                        </select>
+                        <span class="error"></span>
+                    </div>
+                </div>
+
 					<div class="form-group">
 						<label class="col-md-3 control-label"><?=translate('subject')?> <span class="required">*</span></label>
 						<div class="col-md-6 mb-md">
@@ -166,17 +184,28 @@
 			var branchID = $(this).val();
 			getClassByBranch(branchID);
 
-			$.ajax({
-				url: "<?=base_url('ajax/getDataByBranch')?>",
-				type: 'POST',
-				data: {
-					table: 'subject',
-					branch_id: branchID
-				},
-				success: function (data) {
-					$('#subject_holder').html(data);
-				}
-			});
+            $.ajax({
+                url: "<?=base_url('ajax/getDataByBranch')?>",
+                type: 'POST',
+                data: {
+                    table: 'subject',
+                    branch_id: branchID
+                },
+                success: function (data) {
+                    $('#subject_holder').html(data);
+                }
+            });
+            $.ajax({
+                url: "<?=base_url('ajax/getDataByBranch')?>",
+                type: 'POST',
+                data: {
+                    table: 'section',
+                    branch_id: branchID
+                },
+                success: function (data) {
+                    $('#section_holder').html(data);
+                }
+            });
 		});
 	});
 </script>

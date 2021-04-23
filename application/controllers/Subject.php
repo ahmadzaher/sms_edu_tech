@@ -125,7 +125,7 @@ class Subject extends Admin_Controller
                     $this->form_validation->set_rules('branch_id', translate('branch'), 'required');
                 }
                 $this->form_validation->set_rules('class_id', translate('class'), 'trim|required|callback_unique_subject_assign');
-                $this->form_validation->set_rules('section_id', translate('section'), 'trim|required');
+                $this->form_validation->set_rules('sections[]', translate('section'), 'trim|required');
                 $this->form_validation->set_rules('subjects[]', translate('subject'), 'trim|required');
                 if ($this->form_validation->run() !== false) {
                     $branchID = $this->application_model->get_branch_id();
@@ -138,13 +138,17 @@ class Subject extends Admin_Controller
 
                     // get class teacher details
                     $get_teacher = $this->subject_model->get('teacher_allocation', $arraySubject, true);
+                    $sections = $this->input->post('sections');
                     $subjects = $this->input->post('subjects');
-                    foreach ($subjects as $subject) {
-                        $arraySubject['subject_id'] = $subject;
-                        $query = $this->db->get_where("subject_assign", $arraySubject);
-                        if ($query->num_rows() == 0) {
-                            $arraySubject['teacher_id'] = empty($get_teacher) ? 0 : $get_teacher['teacher_id'];
-                            $this->db->insert('subject_assign', $arraySubject);
+                    foreach ($sections as $section){
+                        $arraySubject['section_id'] = $section;
+                        foreach ($subjects as $subject) {
+                            $arraySubject['subject_id'] = $subject;
+                            $query = $this->db->get_where("subject_assign", $arraySubject);
+                            if ($query->num_rows() == 0) {
+                                $arraySubject['teacher_id'] = empty($get_teacher) ? 0 : $get_teacher['teacher_id'];
+                                $this->db->insert('subject_assign', $arraySubject);
+                            }
                         }
                     }
                     set_alert('success', translate('information_has_been_saved_successfully'));
