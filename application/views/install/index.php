@@ -374,7 +374,7 @@
                     </div>
                 </div>
             </section>
-            <center> 2020 © All Rights Reserved - <a href="about:blank">RamomCoder</a></center>
+            <center> 2021 © All Rights Reserved - <a href="about:blank">RamomCoder</a></center>
 		</div>
 		<script src="<?=base_url('assets/vendor/bootstrap/js/bootstrap.js')?>"></script>
 		<script src="<?php echo base_url('assets/vendor/select2/js/select2.js');?>"></script>
@@ -386,7 +386,5 @@
                 });
             });
         </script>
-		
-		
 	</body>
 </html>

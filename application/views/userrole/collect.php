@@ -28,7 +28,7 @@ if (count($allocations)) {
 								<div class="row">
 									<div class="col-xs-6">
 										<div class="ib">
-											<img src="<?=base_url('uploads/app_image/printing-logo.png')?>" alt="RamomCoder Img" />
+											<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="RamomCoder Img" />
 										</div>
 									</div>
 									<div class="col-md-6 text-right">
@@ -199,7 +199,7 @@ if (count($allocations)) {
 								<div class="row">
 									<div class="col-xs-6">
 										<div class="ib">
-											<img src="<?=base_url('uploads/app_image/printing-logo.png')?>" alt="techtune Img" />
+											<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="techtune Img" />
 										</div>
 									</div>
 									<div class="col-md-6 text-right">

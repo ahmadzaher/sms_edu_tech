@@ -88,7 +88,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php $count = 1; foreach($invoicelist as $row): ?>
+							<?php
+							$count = 1;
+							foreach($invoicelist as $row):
+								?>
 							<tr>
 								<td class="hidden-print checked-area hidden-print">
 									<div class="checkbox-replace">

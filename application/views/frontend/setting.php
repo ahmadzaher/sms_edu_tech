@@ -146,34 +146,28 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label"><?php echo translate('theme'); ?> <span class="required">*</span></label>
 						<div class="col-md-6">
-
-
-
-						<ul class="list-unstyled thememenu-sy">
-							<li>
-								<div class="theme-box">
-									<label> 
-										<input name="theme_color" value="blue" type="radio" <?=($setting['theme'] == 'blue' ? 'checked' : '');?>>
-										<div class="theme-img">
-											<img src="<?=base_url('assets/frontend/images/theme/blue.png')?>">
-										</div>
-									</label>
-								</div>
-							</li>
-							<li>
-								<div class="theme-box">
-									<label >
-										<input name="theme_color" value="red" type="radio" <?=($setting['theme'] == 'red' ? 'checked' : '');?> >
-										<div class="theme-img">
-											<img src="<?=base_url('assets/frontend/images/theme/red.png')?>">
-										</div>
-									</label>
-								</div>
-							</li>
-						</ul>
-
-
-
+							<ul class="list-unstyled thememenu-sy">
+								<li>
+									<div class="theme-box">
+										<label> 
+											<input name="theme_color" value="blue" type="radio" <?=($setting['theme'] == null ? 'checked' : '');?> <?=($setting['theme'] == 'blue' ? 'checked' : '');?>>
+											<div class="theme-img">
+												<img src="<?=base_url('assets/frontend/images/theme/blue.png')?>">
+											</div>
+										</label>
+									</div>
+								</li>
+								<li>
+									<div class="theme-box">
+										<label >
+											<input name="theme_color" value="red" type="radio" <?=($setting['theme'] == 'red' ? 'checked' : '');?> >
+											<div class="theme-img">
+												<img src="<?=base_url('assets/frontend/images/theme/red.png')?>">
+											</div>
+										</label>
+									</div>
+								</li>
+							</ul>
 						</div>
 					</div>
 					<div class="form-group">

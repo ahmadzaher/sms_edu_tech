@@ -15,6 +15,12 @@
 				<a href="#collect_fees" data-toggle="tab"><i class="fas fa-hand-holding-usd"></i> <?=translate('collect_fees')?></a>
 			</li>
 <?php endif; ?>
+<?php if (get_permission('collect_fees', 'is_add') && $invoice['status'] != 'total'): ?>
+			<li>
+				<a href="#fully_paid" data-toggle="tab"><i class="far fa-credit-card"></i> Fully Paid</a>
+			</li>
+<?php endif; ?>
+
 		</ul>
 		<div class="tab-content">
 			<div id="invoice" class="tab-pane <?=empty($this->session->flashdata('pay_tab')) ? 'active' : ''; ?>">
@@ -24,7 +30,7 @@
 							<div class="row">
 								<div class="col-xs-6">
 									<div class="ib">
-										<img src="<?=base_url('uploads/app_image/printing-logo.png')?>" alt="RamomCoder Img" />
+										<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="RamomCoder Img" />
 									</div>
 								</div>
 								<div class="col-md-6 text-right">
@@ -61,7 +67,7 @@
 										<address>
 											<?php 
 											echo $basic['first_name'] . ' ' . $basic['last_name'] . '<br>';
-											echo $basic['student_address'] . '<br>';
+											echo (empty($basic['student_address']) ? "" : nl2br($basic['student_address']) . '<br>');
 											echo translate('class') . ' : ' . $basic['class_name'] . '<br>';
 											echo translate('email') . ' : ' . $basic['student_email']; 
 											?>
@@ -103,6 +109,7 @@
 									<?php
 										$count = 1;
 										$total_fine = 0;
+										$fully_total_fine = 0;
 										$total_discount = 0;
 										$total_paid = 0;
 										$total_balance = 0;
@@ -122,6 +129,11 @@
 											$total_amount += $row['amount'];
 											if ($balance != 0) {
 											 	$typeData[$row['allocation_id'] . "|" . $row['fee_type_id']] = $row['name'];
+
+									            $fine = $this->fees_model->feeFineCalculation($row['allocation_id'], $row['fee_type_id']);
+									            $b = $this->fees_model->getBalance($row['allocation_id'], $row['fee_type_id']);
+									            $fine = abs($fine - $b['fine']);
+									            $fully_total_fine += $fine;
 											}
 										?>
 									<tr>
@@ -196,7 +208,7 @@
 							<div class="row">
 								<div class="col-xs-6">
 									<div class="ib">
-										<img src="<?=base_url('uploads/app_image/printing-logo.png')?>" alt="RamomCoder Img" />
+										<img src="<?=$this->application_model->getBranchImage($basic['branch_id'], 'printing-logo')?>" alt="RamomCoder Img" />
 									</div>
 								</div>
 								<div class="col-md-6 text-right">
@@ -233,7 +245,7 @@
 										<address>
 											<?php 
 											echo $basic['first_name'] . ' '. $basic['last_name'] . '<br>';
-											echo $basic['student_address'] . '<br>';
+											echo (empty($basic['student_address']) ? "" : nl2br($basic['student_address']) . '<br>');
 											echo translate('class').' : '. $basic['class_name'] . '<br>';
 											echo translate('email').' : '. $basic['student_email']; 
 											?>
@@ -255,63 +267,69 @@
 								</div>
 							</div>
 						</div>
-
-						<table class="table invoice-items" id="invoice">
-							<thead>
-								<tr class="h5 text-dark">
-									<th id="cell-id" class="text-weight-semibold hidden-print">
-										<div class="checkbox-replace" >
-											<label class="i-checks" data-toggle="tooltip" data-original-title="Print Show / Hidden">
-												<input type="checkbox" name="select-all" id="selectAllchkbox" checked> <i></i>
-											</label>
-										</div>
-									</th>
-									<th id="cell-item" class="text-weight-semibold"><?=translate('fees_type')?></th>
-									<th id="cell-item" class="text-weight-semibold"><?=translate('fees_code')?></th>
-									<th id="cell-item" class="text-weight-semibold"><?=translate('date')?></th>
-									<th id="cell-item" class="text-weight-semibold hidden-print"><?=translate('collect_by')?></th>
-									<th id="cell-desc" class="text-weight-semibold"><?=translate('remarks')?></th>
-									<th id="cell-qty" class="text-weight-semibold"><?=translate('method')?></th>
-									<th id="cell-price" class="text-weight-semibold"><?=translate('amount')?></th>
-									<th id="cell-price" class="text-weight-semibold"><?=translate('discount')?></th>
-									<th id="cell-price" class="text-weight-semibold"><?=translate('fine')?></th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								$allocations = $this->db->where(array('student_id' => $basic['id'], 'session_id' => get_session_id()))->get('fee_allocation')->result_array();
-								foreach ($allocations as $allRow) {
-									$historys = $this->fees_model->getPaymentHistory($allRow['id'], $allRow['group_id']);
-									foreach ($historys as $row) {
-								?>
-								<tr>
-									<td class="hidden-print checked-area">
-										<div class="checkbox-replace">
-											<label class="i-checks"><input type="checkbox" name="chkPrint" checked ><i></i></label>
-										</div>
-									</td>
-									<td class="text-weight-semibold text-dark"><?=$row['name']?></td>
-									<td><?=$row['fee_code']?></td>
-									<td><?=_d($row['date'])?></td>
-									<td class="hidden-print">
-										<?php
-											if ($row['collect_by'] == 'online') {
-												echo translate('online');
-											}else{
-												echo get_type_name_by_id('staff', $row['collect_by']);
-											}
-										?>
-									</td>
-									
-									<td><?=$row['remarks']?></td>
-									<td><?=$row['payvia']?></td>
-									<td><?=$currency_symbol . $row['amount']?></td>
-									<td><?=$currency_symbol . $row['discount']?></td>
-									<td><?=$currency_symbol . $row['fine']?></td>
-								</tr>
-								 <?php } } ?>
-							</tbody>
-						</table>
+					<?php if (get_permission('fees_revert', 'is_delete')): ?>
+						<button type="button" class="btn btn-default btn-sm mb-sm hidden-print" id="selected_revert" data-loading-text="<i class='fas fa-spinner fa-spin'></i> Processing">
+							<i class="fas fa-trash-restore-alt"></i> <?php echo translate('selected_revert'); ?>
+						</button>
+					<?php endif; ?>
+						<div class="table-responsive">
+							<table class="table invoice-items" id="invoice">
+								<thead>
+									<tr class="h5 text-dark">
+										<th id="cell-id" class="text-weight-semibold hidden-print">
+											<div class="checkbox-replace" >
+												<label class="i-checks" data-toggle="tooltip" data-original-title="Print Show / Hidden">
+													<input type="checkbox" name="select-all" id="selectAllchkbox" checked> <i></i>
+												</label>
+											</div>
+										</th>
+										<th id="cell-item" class="text-weight-semibold"><?=translate('fees_type')?></th>
+										<th id="cell-item" class="text-weight-semibold"><?=translate('fees_code')?></th>
+										<th id="cell-item" class="text-weight-semibold"><?=translate('date')?></th>
+										<th id="cell-item" class="text-weight-semibold hidden-print"><?=translate('collect_by')?></th>
+										<th id="cell-desc" class="text-weight-semibold"><?=translate('remarks')?></th>
+										<th id="cell-qty" class="text-weight-semibold"><?=translate('method')?></th>
+										<th id="cell-price" class="text-weight-semibold"><?=translate('amount')?></th>
+										<th id="cell-price" class="text-weight-semibold"><?=translate('discount')?></th>
+										<th id="cell-price" class="text-weight-semibold"><?=translate('fine')?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									$allocations = $this->db->where(array('student_id' => $basic['id'], 'session_id' => get_session_id()))->get('fee_allocation')->result_array();
+									foreach ($allocations as $allRow) {
+										$historys = $this->fees_model->getPaymentHistory($allRow['id'], $allRow['group_id']);
+										foreach ($historys as $row) {
+									?>
+									<tr>
+										<td class="hidden-print checked-area">
+											<div class="checkbox-replace">
+												<label class="i-checks"><input type="checkbox" name="chkPrint" value="<?php echo $row['id']; ?>" checked><i></i></label>
+											</div>
+										</td>
+										<td class="text-weight-semibold text-dark"><?=$row['name']?></td>
+										<td><?=$row['fee_code']?></td>
+										<td><?=_d($row['date'])?></td>
+										<td class="hidden-print">
+											<?php
+												if ($row['collect_by'] == 'online') {
+													echo translate('online');
+												}else{
+													echo get_type_name_by_id('staff', $row['collect_by']);
+												}
+											?>
+										</td>
+										
+										<td><?=$row['remarks']?></td>
+										<td><?=$row['payvia']?></td>
+										<td><?=$currency_symbol . $row['amount']?></td>
+										<td><?=$currency_symbol . $row['discount']?></td>
+										<td><?=$currency_symbol . $row['fine']?></td>
+									</tr>
+									 <?php } } ?>
+								</tbody>
+							</table>
+						</div>
 						<div class="invoice-summary text-right mt-lg">
 							<div class="row">
 								<div class="col-lg-5 pull-right">
@@ -442,14 +460,141 @@
 					<?php echo form_close();?>
 				</div>
 			<?php endif; ?>
+			<!--fully paid form-->
+			<?php if($invoice['status'] != 'total'): ?>
+				<div id="fully_paid" class="tab-pane">
+					<?php echo form_open('fees/fee_fully_paid', array('class' => 'form-horizontal frm-submit' )); ?>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><?=translate('date')?> <span class="required">*</span></label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" data-plugin-datepicker
+								data-plugin-options='{"todayHighlight" : true}' name="date" value="<?=date('Y-m-d')?>" autocomplete="off" />
+								<span class="error"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><?=translate('amount')?> <span class="required">*</span></label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="amount" id="feeAmount" value="<?=number_format($total_balance, 2, '.', '')?>" autocomplete="off" disabled />
+								<span class="error"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><?=translate('fine')?></label>
+							<div class="col-md-6">
+								<input type="text" class="form-control" name="fine_amount" id="fineAmount" value="<?=number_format($fully_total_fine, 2, '.', '')?>" autocomplete="off" disabled />
+								<span class="error"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><?=translate('payment_method')?> <span class="required">*</span></label>
+							<div class="col-md-6">
+	    						<?php
+	    							$payvia_list = $this->app_lib->getSelectList('payment_types');
+	    							echo form_dropdown("pay_via", $payvia_list, set_value('pay_via'), "class='form-control' data-plugin-selectTwo data-width='100%'
+	    							data-minimum-results-for-search='Infinity' ");
+	    						?>
+								<span class="error"></span>
+							</div>
+						</div>
+                        <?php
+                        $links = $this->fees_model->get('transactions_links', array('branch_id' => $basic['branch_id']), true);
+                        if ($links['status'] == 1) {
+                        ?>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"><?php echo translate('account'); ?> <span class="required">*</span></label>
+                               	<div class="col-md-6">
+                                <?php
+                                    $accounts_list = $this->app_lib->getSelectByBranch('accounts', $basic['branch_id']);
+                                    echo form_dropdown("account_id", $accounts_list, $links['deposit'], "class='form-control' id='account_id' required data-plugin-selectTwo data-width='100%'");
+                                ?>
+                            	</div>
+                            </div>
+                        <?php } ?>
+						<div class="form-group">
+							<label class="col-md-3 control-label"><?=translate('remarks')?></label>
+							<div class="col-md-6 mb-md">
+								<textarea name="remarks" rows="2" class="form-control" placeholder="<?=translate('write_your_remarks')?>"></textarea>
+								<div class="checkbox-replace mt-lg">
+									<label class="i-checks">
+										<input type="checkbox" name="guardian_sms" checked> <i></i> Guardian Confirmation Sms
+									</label>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="invoice_id" value="<?php echo $basic['id']; ?>">
+						<input type="hidden" name="branch_id" value="<?=$basic['branch_id']?>">
+						<input type="hidden" name="student_id" value="<?=$basic['id']?>">
+						<footer class="panel-footer">
+							<div class="row">
+								<div class="col-md-offset-3 col-md-3">
+									<button type="submit" class="btn btn-default" data-loading-text="<i class='fas fa-spinner fa-spin'></i> Processing">
+										<?=translate('fee_payment')?>
+									</button>
+								</div>
+							</div>
+						</footer>
+					<?php echo form_close();?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </section>
 
 <script type="text/javascript">
+    $('#selected_revert').on('click', function(e){
+    	var $this = $(this);
+		var payment_id = [];
+		$.each($("input[name='chkPrint']:checked"), function () {
+			payment_id.push($(this).val());
+		});
+		swal({
+			title: "<?php echo translate('are_you_sure')?>",
+			text: "<?php echo translate('delete_this_information')?>",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonClass: "btn btn-default swal2-btn-default",
+			cancelButtonClass: "btn btn-default swal2-btn-default",
+			confirmButtonText: "<?php echo translate('yes_continue')?>",
+			cancelButtonText: "<?php echo translate('cancel')?>",
+			buttonsStyling: false,
+			footer: "<?php echo translate('deleted_note')?>"
+		}).then((result) => {
+			if (result.value) {
+				$.ajax({
+					url: base_url + 'fees/paymentRevert',
+					type: "POST",
+					data: {'id': payment_id},
+					dataType: "JSON",
+	                beforeSend: function () {
+	                    $this.button('loading');
+	                },
+					success:function(data) {
+						swal({
+						title: "<?php echo translate('deleted')?>",
+						text: data.message,
+						buttonsStyling: false,
+						showCloseButton: true,
+						focusConfirm: false,
+						confirmButtonClass: "btn btn-default swal2-btn-default",
+						type: data.status
+						}).then((result) => {
+							if (result.value) {
+								location.reload();
+							}
+						});
+					},
+	                complete: function () {
+	                    $this.button('reset');
+	                }
+				});
+			}
+		});
+    });
+
+
     $('#fees_type').on("change", function(){
         var typeID = $(this).val();
-
 	    $.ajax({
 	        url: base_url + 'fees/getBalanceByType',
 	        type: 'POST',

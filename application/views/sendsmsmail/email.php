@@ -2,7 +2,7 @@
 <section class="panel">
 	<div class="tabs-custom">
 		<ul class="nav nav-tabs">
-<!--			<li><a href="--><?//=base_url('sendsmsmail/sms')?><!--"> <i class="far fa-comment"></i> SMS</a> </li>-->
+            <!--			<li><a href="--><?//=base_url('sendsmsmail/sms')?><!--"> <i class="far fa-comment"></i> SMS</a> </li>-->
             <li><a href="<?=base_url('sendsmsmail/semysms')?>"> <i class="far fa-comment"></i> SMS</a> </li>
 			<li class="active"> <a href="#add" data-toggle="tab"> <i class="far fa-envelope"></i> Email</a> </li>
 		</ul>

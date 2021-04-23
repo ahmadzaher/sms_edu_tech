@@ -59,7 +59,7 @@
 				</div>
 			</div>
 			<div class="tab-pane <?=(!empty($validation_error) ? 'active' : '')?>" id="create">
-				<?php echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal form-bordered validate')); ?>
+				<?php echo form_open_multipart($this->uri->uri_string(), array('class' => 'form-horizontal form-bordered validate')); ?>
 					<div class="form-group mt-md">
 						<label class="col-md-3 control-label"><?=translate('branch_name')?> <span class="required">*</span></label>
 						<div class="col-md-6">
@@ -118,6 +118,26 @@
 						<label  class="col-md-3 control-label"><?=translate('address')?></label>
 						<div class="col-md-6 mb-md">
 							<textarea type="text" rows="3" class="form-control" name="address" ><?=set_value('address')?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-3">
+							<label class="control-label pt-none"><?=translate('system_logo');?></label>
+							<input type="file" name="logo_file" class="dropify" data-allowed-file-extensions="png" data-default-file="<?=$this->application_model->getBranchImage('', 'logo')?>" />
+						</div>
+						<div class="col-md-3 mb-md">
+							<label class="control-label pt-none"><?=translate('text_logo');?></label>
+							<input type="file" name="text_logo" class="dropify" data-allowed-file-extensions="png" data-default-file="<?=$this->application_model->getBranchImage('', 'logo-small')?>" />
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-3">
+							<label class="control-label pt-none"><?=translate('printing_logo');?></label>
+							<input type="file" name="print_file" class="dropify" data-allowed-file-extensions="png" data-default-file="<?=$this->application_model->getBranchImage('', 'printing-logo')?>" />
+						</div>
+						<div class="col-md-3 mb-md">
+							<label class="control-label pt-none"><?=translate('report_card');?></label>
+							<input type="file" name="report_card" class="dropify" data-allowed-file-extensions="png" data-default-file="<?=$this->application_model->getBranchImage('', 'report-card-logo')?>" />
 						</div>
 					</div>
 					<footer class="panel-footer mt-lg">

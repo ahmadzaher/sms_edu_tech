@@ -117,7 +117,7 @@
 									<td><?=$count++?></td>
 									<td class="hidden-print checked-area hidden-print" width="30">
 										<div class="checkbox-replace">
-											<label class="i-checks"><input type="checkbox" name="user_id[]" value="<?=$row['id']?>"><i></i></label>
+											<label class="i-checks"><input type="checkbox" name="user_id[]" value="<?=$row['student_id']?>"><i></i></label>
 										</div>
 									</td>
 									<td><?=$row['fullname']?></td>

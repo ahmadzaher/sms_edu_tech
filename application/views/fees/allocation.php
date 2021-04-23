@@ -64,62 +64,67 @@
 
 		<?php if (isset($studentlist)):?>
 		<section class="panel appear-animation" data-appear-animation="<?=$global_config['animations'] ?>" data-appear-animation-delay="100">
-			<?php echo form_open($this->uri->uri_string());?>
+			<?php echo form_open('fees/allocation_save',  array('class' => 'frm-submit-msg'));?>
 			<input type="hidden" name="fee_group_id" value="<?=$fee_group_id; ?>" >
 			<input type="hidden" name="branch_id" value="<?=$branch_id; ?>" >
 			<header class="panel-heading">
 				<h4 class="panel-title"><i class="fas fa-list"></i> <?php echo translate('student_list');?></h4>
 			</header>
 			<div class="panel-body mb-sm">
-				<table class="table table-bordered table-condensed table-hover mb-none">
-					<thead>
-						<tr>
-							<th width="80">
-								<div class="checkbox-replace">
-									<label class="i-checks"><input type="checkbox" id="selectAllchkbox"><i></i></label>
-								</div>
-							</th>
-							<th width="80"><?=translate('sl')?></th>
-							<th><?=translate('name')?></th>
-							<th><?=translate('register_no')?></th>
-							<th><?=translate('roll')?></th>
-							<th><?=translate('gender')?></th>
-							<th><?=translate('mobile_no')?></th>
-							<th><?=translate('email')?></th>
-							<th><?=translate('guardian_name')?></th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						$count = 1; 
-						if (count($studentlist)) {
-							foreach($studentlist as $row):
-							?>
-						<tr>
-							<td class="checked-area">
-								<div class="checkbox-replace">
-									<label class="i-checks"><input type="checkbox" name="stu_operations[]" <?=($row['allocation_id'] != 0 ? 'checked' : "");?> value="<?=$row['student_id']?>"><i></i></label>
-								</div>
-							</td>
-							<td><?php echo $count++; ?></td>
-							<td><?php echo $row['fullname']; ?></td>
-							<td><?php echo $row['register_no']; ?></td>
-							<td><?php echo $row['roll']; ?></td>
-							<td><?php echo ucfirst($row['gender']); ?></td>
-							<td><?php echo $row['mobileno']; ?></td>
-							<td><?php echo $row['email']; ?></td>
-							<td><?php echo (!empty($row['parent_id']) ? get_type_name_by_id('parent', $row['parent_id']) : 'N/A'); ?></td>
-						</tr>
-						<?php endforeach; }else{
-							echo '<tr><td colspan="9"><h5 class="text-danger text-center">' . translate('no_information_available') . '</td></tr>'; 
-						} ?>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table table-bordered table-condensed table-hover mb-none">
+						<thead>
+							<tr>
+								<th width="80">
+									<div class="checkbox-replace">
+										<label class="i-checks"><input type="checkbox" id="selectAllchkbox"><i></i></label>
+									</div>
+								</th>
+								<th width="80"><?=translate('sl')?></th>
+								<th><?=translate('name')?></th>
+								<th><?=translate('register_no')?></th>
+								<th><?=translate('roll')?></th>
+								<th><?=translate('gender')?></th>
+								<th><?=translate('mobile_no')?></th>
+								<th><?=translate('email')?></th>
+								<th><?=translate('guardian_name')?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$count = 1; 
+							if (count($studentlist)) {
+								foreach($studentlist as $row):
+								?>
+								<input type="hidden" name="student_ids[]" value="<?php echo $row['student_id']; ?>">
+							<tr>
+								<td class="checked-area">
+									<div class="checkbox-replace">
+										<label class="i-checks"><input type="checkbox" name="stu_operations[]" <?=($row['allocation_id'] != 0 ? 'checked' : "");?> value="<?=$row['student_id']?>"><i></i></label>
+									</div>
+								</td>
+								<td><?php echo $count++; ?></td>
+								<td><?php echo $row['fullname']; ?></td>
+								<td><?php echo $row['register_no']; ?></td>
+								<td><?php echo $row['roll']; ?></td>
+								<td><?php echo ucfirst($row['gender']); ?></td>
+								<td><?php echo $row['mobileno']; ?></td>
+								<td><?php echo $row['email']; ?></td>
+								<td><?php echo (!empty($row['parent_id']) ? get_type_name_by_id('parent', $row['parent_id']) : 'N/A'); ?></td>
+							</tr>
+							<?php endforeach; }else{
+								echo '<tr><td colspan="9"><h5 class="text-danger text-center">' . translate('no_information_available') . '</td></tr>'; 
+							} ?>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<footer class="panel-footer">
 				<div class="row">
 					<div class="col-md-offset-10 col-md-2">
-						<button type="submit" name="save" value="1" class="btn btn-default btn-block"> <i class="fas fa-plus-circle"></i> <?=translate('save')?></button>
+						<button type="submit" class="btn btn-default btn-block" data-loading-text="<i class='fas fa-spinner fa-spin'></i> Processing">
+							<i class="fas fa-plus-circle"></i> <?=translate('save')?>
+						</button>
 					</div>
 				</div>
 			</footer>
@@ -134,7 +139,6 @@
 		$('#branch_id').on('change', function(){
 			var branchID = $(this).val();
 			getClassByBranch(branchID);
-
 		    $.ajax({
 		        url: base_url + 'fees/getGroupByBranch',
 		        type: 'POST',

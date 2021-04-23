@@ -125,6 +125,18 @@
                                     <span><i class="fas fa-caret-right"></i><?php echo translate('faq'); ?></span>
                                 </a>
                             </li>
+                            <?php } if(get_permission('frontend_gallery_type', 'is_view')){ ?>
+                            <li class="<?php if ($sub_page == 'frontend/gallery_category') echo 'nav-active'; ?>">
+                                <a href="<?php echo base_url('frontend/gallery/category'); ?>">
+                                    <span><i class="fas fa-caret-right"></i><?php echo translate('gallery') . " " . translate('category'); ?></span>
+                                </a>
+                            </li>
+                            <?php } if(get_permission('frontend_gallery', 'is_view')){ ?>
+                            <li class="<?php if ($sub_page == 'frontend/gallery' || $sub_page == 'frontend/gallery_edit') echo 'nav-active'; ?>">
+                                <a href="<?php echo base_url('frontend/gallery'); ?>">
+                                    <span><i class="fas fa-caret-right"></i><?php echo translate('gallery'); ?></span>
+                                </a>
+                            </li>
                             <?php } ?>
                         </ul>
                     </li>

@@ -93,7 +93,7 @@
 						<tbody>
 						<?php
 						$days = array(
-							'saturday',
+                            'saturday',
 							'sunday',
 							'monday',
 							'tuesday',
@@ -106,7 +106,7 @@
 						$max = max($count);
 						foreach ($days as $key => $day):
 							echo '<tr>';
-								echo '<td class="timetable">' . translate($day) . '</td>';
+                                echo '<td class="timetable">' . translate($day) . '</td>';
 								$row_count = 0;
 								foreach ($timetables as $timetable){
 									if($timetable->day == $day) {

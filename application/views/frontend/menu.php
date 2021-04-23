@@ -1,3 +1,18 @@
+<style type="text/css">
+	.sub_menu {
+		background: #f0f0f0;
+	}
+	html.dark .sub_menu {
+		background: #3e3c3c;
+		color: #ddd;
+	}
+</style>
+<?php if (is_superadmin_loggedin() ): ?>
+	<?php $this->load->view('frontend/branch_select'); ?>
+<?php endif; 
+if (!empty($branch_id)) {
+	?>
+
 <section class="panel">
 	<div class="tabs-custom">
 		<ul class="nav nav-tabs">
@@ -12,15 +27,14 @@
 		</ul>
 		<div class="tab-content">
 			<div id="list" class="tab-pane active">
-				<table class="table table-bordered table-hover table-condensed table_default" cellspacing="0" width="100%">
+				<table class="table tbr-middle table-condensed table_default" data-order="true" cellspacing="0" width="100%">
 					<thead>
 						<tr>
 							<th><?php echo translate('sl'); ?></th>
-<?php if (is_superadmin_loggedin()): ?>
-							<th><?=translate('branch')?></th>
-<?php endif; ?>
+							<th><?php echo translate('menu') . " " . translate('type'); ?></th>
 							<th><?php echo translate('title'); ?></th>
 							<th><?php echo translate('position'); ?></th>
+							<th><?php echo "Sub Menu"; ?></th>
 							<th><?php echo translate('publish'); ?></th>
 							<th><?php echo translate('action'); ?></th>
 						</tr>
@@ -28,31 +42,50 @@
 					<tbody>
 						<?php
 							$count = 1;
+							$menulist = $this->frontend_model->getMenuList($branch_id);
 							if (!empty($menulist)) {
 								foreach ($menulist as $row):
+									$publish = '';
+									$edit_branch_id = '';
+									if ($row['system']) {
+										if (is_superadmin_loggedin()) {
+											$edit_branch_id = "/" . $branch_id; 
+										}
+										if ($row['invisible'] == 0) {
+											$publish = 'checked';
+										}
+									} else {
+										if ($row['publish']) {
+											$publish = 'checked';
+										}
+									}
 								?>
 						<tr>
 							<td><?php echo $count++; ?></td>
-<?php if (is_superadmin_loggedin()): ?>
 							<td><?php
 							if ($row['system'] == 1) {
 								echo "System Menu";
 							} else {
-								echo $row['branch_name'];
+								echo "Has Been Added";
 							}
 							?></td>
-<?php endif; ?>
 							<td><?php echo strip_tags($row['title']); ?></td>
 							<td><?php echo $row['ordering']; ?></td>
+							<td><?php
+							 if (!empty($row['submenu'])) {
+							 	echo '<i class="fas fa-arrow-down"></i>';
+							 } else {
+							 	echo '-';
+							 } ?></td>
 							<td>
 		                        <div class="material-switch ml-xs">
-		                            <input class="switch_menu" id="switch_<?php echo $row['id']; ?>" data-menu-id="<?php echo $row['id']; ?>" name="sw_menu<?php echo $row['id']; ?>" type="checkbox" <?php echo $row['publish'] == 1 ? 'checked' : ''; ?> />
+		                            <input class="switch_menu" id="switch_<?php echo $row['id']; ?>" data-menu-id="<?php echo $row['id']; ?>" name="sw_menu<?php echo $row['id']; ?>" type="checkbox" <?php echo $publish; ?> />
 		                            <label for="switch_<?php echo $row['id']; ?>" class="label-primary"></label>
 		                        </div>
 							</td>
 							<td class="min-w-xs">
 							<?php if (get_permission('frontend_menu', 'is_edit')) { ?>
-								<a href="<?php echo base_url('frontend/menu/edit/' . $row['id']); ?>" class="btn btn-default btn-circle icon" data-toggle="tooltip" data-original-title="<?php echo translate('edit'); ?>"> 
+								<a href="<?php echo base_url('frontend/menu/edit/' . $row['id'] . $edit_branch_id); ?>" class="btn btn-default btn-circle icon" data-toggle="tooltip" data-original-title="<?php echo translate('edit'); ?>"> 
 									<i class="fas fa-pen-nib"></i>
 								</a>
 							<?php } ?>
@@ -65,6 +98,51 @@
 							?>
 							</td>
 						</tr>
+					<?php if (!empty($row['submenu'])) {
+						foreach ($row['submenu'] as $key => $value) {
+							$publish = '';
+							$edit_branch_id = '';
+							if ($value['system']) {
+								if (is_superadmin_loggedin()) {
+									$edit_branch_id = "/" . $branch_id; 
+								}
+								if ($value['invisible'] == 0) {
+									$publish = 'checked';
+								}
+							} else {
+								if ($value['publish']) {
+									$publish = 'checked';
+								}
+							}
+					 ?>
+						<tr class="sub_menu">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><i class="fas fa-angle-double-right"></i> <?php echo $value['title'] ?></td>
+							<td>
+		                        <div class="material-switch ml-xs">
+		                            <input class="switch_menu" id="switch_<?php echo $value['id']; ?>" data-menu-id="<?php echo $value['id']; ?>" name="sw_menu<?php echo $value['id']; ?>" type="checkbox" <?php echo $publish; ?> />
+		                            <label for="switch_<?php echo $value['id']; ?>" class="label-primary"></label>
+		                        </div>
+							</td>
+							<td class="min-w-xs">
+							<?php if (get_permission('frontend_menu', 'is_edit')) { ?>
+								<a href="<?php echo base_url('frontend/menu/edit/' . $value['id'] . $edit_branch_id); ?>" class="btn btn-default btn-circle icon" data-toggle="tooltip" data-original-title="<?php echo translate('edit'); ?>"> 
+									<i class="fas fa-pen-nib"></i>
+								</a>
+							<?php } ?>
+							<?php
+								if ($value['system'] == 0) {
+									if (get_permission('frontend_menu', 'is_delete')) {
+										echo btn_delete('frontend/menu/delete/' . $value['id']); 
+									}
+								}
+							?>
+							</td>
+						</tr>
+					<?php }} ?>
 						<?php endforeach; }?>
 					</tbody>
 				</table>
@@ -133,6 +211,20 @@
 							<span class="error"></span>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="col-md-3 control-label"><?=translate('parent_menu')?></label>
+						<div class="col-md-6">
+							<?php
+							$getMenuList = $this->frontend_model->getMenuList($branch_id);
+				            $array = array(0 => translate('select'));
+				            foreach ($getMenuList as $row) {
+				                $array[$row['id']] = ' - ' . $row['title'];
+				            }
+							echo form_dropdown("parent_id", $array, '', "class='form-control' data-width='100%' data-plugin-selectTwo  data-minimum-results-for-search='Infinity'");
+							?>
+							<span class="error"></span>
+						</div>
+					</div>
 					<footer class="panel-footer mt-lg">
 						<div class="row">
 							<div class="col-md-2 col-md-offset-3">
@@ -148,3 +240,14 @@
 		</div>
 	</div>
 </section>
+
+<script type="text/javascript">
+	var menu_branchID = "<?=$branch_id?>"
+</script>
+<?php } ?>
+
+
+
+
+
+

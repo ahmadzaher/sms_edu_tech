@@ -1,7 +1,7 @@
 <header class="header">
 	<div class="logo-env">
 		<a href="<?php echo base_url('dashboard');?>" class="logo">
-			<img src="<?php echo base_url('uploads/app_image/logo-small.png');?>" height="40">
+			<img src="<?=$this->application_model->getBranchImage(get_loggedin_branch_id(), 'logo-small')?>" height="40">
 		</a>
 
 		<div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
@@ -96,7 +96,7 @@
 			<li>
 				<a href="<?php echo $webURL; ?>" target="_blank" class="header-menu-icon" data-toggle="tooltip" data-placement="bottom"
 				data-original-title="<?php echo translate('visit_home_page'); ?>">
-					<i class="fas fa-home"></i>
+					<i class="fas fa-globe"></i>
 				</a>
 			</li>
 		<?php } ?>

@@ -218,14 +218,14 @@ $previous_details = json_decode($student['previous_details'], true);
                             </div>
 						</div>
 
-						<div class="row">
-							<div class="col-md-4 mb-sm hide">
+						<div class="row hide">
+							<div class="col-md-4 mb-sm">
 								<div class="form-group">
 									<label class="control-label"><?=translate('religion')?></label>
 									<input type="text" class="form-control" name="religion" value="<?=set_value('religion', $student['religion'])?>" />
 								</div>
 							</div>
-							<div class="col-md-4 mb-sm hide">
+							<div class="col-md-4 mb-sm">
 								<div class="form-group">
 									<label class="control-label"><?=translate('caste')?></label>
 									<input type="text" class="form-control" name="caste" value="<?=set_value('caste', $student['caste'])?>" />

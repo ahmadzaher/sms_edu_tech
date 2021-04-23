@@ -34,6 +34,7 @@
 													"3" 		=> "Msg91",
 													"4" 		=> "Bulk",
 													"5" 		=> "Textlocal",
+													"6" 		=> "SMS country",
 												);
 												echo form_dropdown("sms_service_provider", $arraySMS, set_value('sms_service', $sms_service_provider), "class='form-control'
 												data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
@@ -249,6 +250,49 @@
 											<label class="col-md-3 control-label"><?=translate('hash_key')?> <span class="required">*</span></label>
 											<div class="col-md-6 mb-md">
 												<input type="text" class="form-control" name="textlocal_hash_key" value="<?=$api['textlocal']['field_three']?>">
+												<span class="error"></span>
+											</div>
+										</div>
+									</div>
+									<div class="panel-footer">
+										<div class="row">
+											<div class="col-md-offset-3 col-md-2">
+												<button type="submit" class="btn btn-default btn-block" data-loading-text="<i class='fas fa-spinner fa-spin'></i> Processing">
+													<i class="fas fa-plus-circle"></i> <?=translate('save')?>
+												</button>
+											</div>
+										</div>
+									</div>
+									<?php echo form_close();?>
+								</div>
+							</div>
+							<div class="panel panel-accordion">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#sms_country">SMS country Gateway</a>
+									</h4>
+								</div>
+								<div id="sms_country" class="accordion-body collapse">
+									<?php echo form_open('school_settings/sms_country' . $url, array('class' => 'form-horizontal form-bordered frm-submit-msg')); ?>
+									<div class="panel-body">
+										<div class="form-group mt-md">
+										  <label  class="col-md-3 control-label"><?=translate('username')?> <span class="required">*</span></label>
+											<div class="col-md-6">
+												<input type="text" class="form-control" name="username" value="<?=$api['smscountry']['field_one']?>">
+												<span class="error"></span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><?=translate('password')?> <span class="required">*</span></label>
+											<div class="col-md-6">
+												<input type="text" class="form-control" name="password" value="<?=$api['smscountry']['field_two']?>">
+												<span class="error"></span>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"><?=translate('sender_id')?> <span class="required">*</span></label>
+											<div class="col-md-6 mb-md">
+												<input type="text" class="form-control" name="sender_id" value="<?=$api['smscountry']['field_three']?>">
 												<span class="error"></span>
 											</div>
 										</div>

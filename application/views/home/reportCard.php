@@ -20,12 +20,8 @@
 </style>
 
 <?php
-if (count($student_array)) {
-	foreach ($student_array as $sc => $studentID) {
-		$result = $this->exam_model->getStudentReportCard($studentID, $examID, $sessionID);
 		$student = $result['student'];
 		$getMarksList = $result['exam'];
-
 		$getExam = $this->db->where(array('id' => $examID))->get('exam')->row_array();
 		$getSchool = $this->db->where(array('id' => $getExam['branch_id']))->get('branch')->row_array();
 		$schoolYear = get_type_name_by_id('schoolyear', $sessionID, 'school_year');
@@ -137,7 +133,7 @@ if (count($student_array)) {
 							}
 						?>
 					</td>
-				<?php } if ($getExam['type_id'] == 2){ ?>
+				<?php } if ($getExam['type_id'] == 2) { ?>
 					<td valign="middle">
 						<?php 
 							if ($row['get_abs'] == 'on') {
@@ -211,10 +207,10 @@ if (count($student_array)) {
 		<div style="width: 100%; display: flex;">
 			<div style="width: 50%; padding-right: 15px;">
 				<?php
-				if ($attendance == true) {
+				if ($attendance == 1) {
 					$year = explode('-', $schoolYear);
-					$getTotalWorking = $this->db->where(array('student_id' => $studentID, 'status !=' => 'H', 'year(date)' => $year[0]))->get('student_attendance')->num_rows();
-					$getTotalAttendance = $this->db->where(array('student_id' => $studentID, 'status' => 'P', 'year(date)' => $year[0]))->get('student_attendance')->num_rows();
+					$getTotalWorking = $this->db->where(array('student_id' => $userID, 'status !=' => 'H', 'year(date)' => $year[0]))->get('student_attendance')->num_rows();
+					$getTotalAttendance = $this->db->where(array('student_id' => $userID, 'status' => 'P', 'year(date)' => $year[0]))->get('student_attendance')->num_rows();
 					$attenPercentage = empty($getTotalWorking) ? '0.00' : ($getTotalAttendance * 100) / $getTotalWorking;
 					?>
 				<table class="table table-bordered table-condensed">
@@ -239,7 +235,7 @@ if (count($student_array)) {
 				<?php } ?>
 			</div>
 	<?php
-	if ($grade_scale == true) {
+	if ($grade_scale == 1) {
 		if ($getExam['type_id'] != 1) {
 			?>
 			<div style="width: 50%; padding-left: 15px;">
@@ -268,18 +264,6 @@ if (count($student_array)) {
 			</div>
 	<?php } } ?>
 		</div>
-	<?php if (!empty($remarks_array[$sc])) { ?>
-		<div style="width: 100%;">
-			<table class="table table-condensed table-bordered">
-				<tbody>
-					<tr>
-						<th style="width: 250px;">Remarks</th>
-						<td><?=$remarks_array[$sc]?></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	<?php } ?>
 		<table style="width:100%; outline:none; margin-top: 35px;">
 			<tbody>
 				<tr>
@@ -291,5 +275,4 @@ if (count($student_array)) {
 			</tbody>
 		</table>
 	</div>
-	<div class="pagebreak"> </div> 
-<?php } } ?>
+

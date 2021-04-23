@@ -37,7 +37,7 @@
                                 <h2><?php echo translate('welcome_to');?></h2>
                             </div>
                             <div class="center img-hol-p">
-                                <img src="<?php echo base_url('uploads/app_image/logo.png');?>" height="60" alt="RamomCoder School">
+                                <img src="<?=$this->application_model->getBranchImage($branch_id, 'logo')?>" height="60" alt="RamomCoder School">
                             </div>
                             <div class="address">
                                 <p><?php echo $global_config['address'];?></p>
@@ -64,7 +64,7 @@
                     <div class="col-lg-6 col-lg-offset-right-1 col-md-6 col-md-offset-right-1 col-sm-12 col-xs-12 no-padding">
                         <div class="sign-area">
                             <div class="sign-hader">
-                                <img src="<?php echo base_url('uploads/app_image/logo.png');?>" height="54" alt="">
+                                <img src="<?=$this->application_model->getBranchImage($branch_id, 'logo')?>" height="54" alt="">
                                 <h2><?php echo $global_config['institute_name'];?></h2>
                             </div>
                             <?php echo form_open($this->uri->uri_string()); ?>
@@ -94,7 +94,7 @@
                                         <label class="i-checks"><input type="checkbox" name="remember" id="remember"><i></i> <?php echo translate('remember');?></label>
                                     </div>
                                     <div class="">
-                                        <a href="<?php echo base_url('authentication/forgot');?>"><?php echo translate('lose_your_password');?></a>
+                                        <a href="<?php echo base_url('authentication/forgot') . $this->authentication_model->getSegment(3);?>"><?php echo translate('lose_your_password');?></a>
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -25,7 +25,7 @@
                                 <label class="control-label"><?php echo translate('campaign_type'); ?> <span class="required">*</span></label>
                                 <?php
                                     $arrayType = array(
-                                        '' => translate('select'), 
+                                        '' => translate('select'),
                                         '2' => 'Sms',
                                         '3' => 'Email',
                                     );;

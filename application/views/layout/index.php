@@ -5,7 +5,7 @@
 
 <!-- <body class="loading-overlay-showing" data-loading-overlay> -->
 <?php if ($global_config['preloader_backend'] == 1) { ?>
-<body class="loading-overlay-showing" data-loading-overlay>
+<body oncontextmenu="return false;" class="loading-overlay-showing" data-loading-overlay>
 	<!-- page preloader -->
 	<div class="loading-overlay dark">
 		<div class="ring-loader">
@@ -68,6 +68,26 @@
 
 	<!-- sweetalert box -->
 	<script type="text/javascript">
+
+
+		document.onkeydown = function(e) {
+			if(event.keyCode == 123) {
+				return false;
+			}
+			if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+				return false;
+			}
+			if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+				return false;
+			}
+			if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+				return false;
+			}
+			if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+				return false;
+			}
+		}
+
 		function confirm_modal(delete_url) {
 			swal({
 				title: "<?php echo translate('are_you_sure')?>",

@@ -1,3 +1,54 @@
+<?php
+	$branch_id 		= '';
+	$title 			= '';
+	$parent_menu 	= '';
+	$parent_id 		= 0;
+	$publish 		= true;
+	if ($menu['system']) {
+		if (is_superadmin_loggedin()) {
+			$branch_id = $this->uri->segment(5);
+		} else {
+			$branch_id = get_loggedin_branch_id();
+		}
+		$query = $this->db->select('*')
+		->from("front_cms_menu_visible")
+		->where(array('menu_id' => $menu['id'], 'branch_id' => $branch_id))
+		->get()->row();
+		if (!empty($query->name)) {
+			$title = $query->name;
+		} else {
+			$title = $menu['title'];
+		}
+		if (!empty($query->invisible)) {
+			if ($query->invisible !== 0) {
+				$publish = false;
+			}
+		}
+		if (!empty($query->parent_id)) {
+			$parent_id = $query->parent_id;
+		} else {
+			$parent_id = $menu['parent_id'];
+		}
+	} else {
+		$branch_id 	= $menu['branch_id'];
+		$title 		= $menu['title'];
+		$publish 	= $menu['publish'];
+		$parent_id 	= $menu['parent_id'];
+		if (!is_superadmin_loggedin()) {
+			if (get_loggedin_branch_id() !== $menu['branch_id']) {
+				redirect ('404_override');
+			}
+		}
+	}
+	
+	$query_submenus = $this->db->select('id')
+	->from("front_cms_menu")
+	->where(array('parent_id' => $menu['id']))
+	->get()->num_rows();
+	if ($query_submenus !== 0) {
+		$parent_menu = 'disabled';
+	}
+?>
 <section class="panel">
 	<div class="tabs-custom">
 		<ul class="nav nav-tabs">
@@ -11,13 +62,14 @@
 		<div class="tab-content active" id="edit">
 			<?php echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal form-bordered frm-submit')); ?>
 				<input type="hidden" name="menu_id" value="<?php echo $menu['id']; ?>">
+				<input type="hidden" name="branch_id" value="<?php echo $branch_id; ?>">
 				<?php if (is_superadmin_loggedin()): ?>
 					<div class="form-group">
 						<label class="col-md-3 control-label"><?=translate('branch')?> <span class="required">*</span></label>
 						<div class="col-md-6">
 							<?php
 							$arrayBranch = $this->app_lib->getSelectList('branch');
-							echo form_dropdown("branch_id", $arrayBranch, $menu['branch_id'], "class='form-control' data-width='100%'
+							echo form_dropdown("branch_id", $arrayBranch, $branch_id, "class='form-control' data-width='100%'
 							data-plugin-selectTwo  data-minimum-results-for-search='Infinity'");
 							?>
 							<span class="error"></span>
@@ -27,7 +79,7 @@
 				<div class="form-group">
 					<label class="col-md-3 control-label"><?php echo translate('title'); ?> <span class="required">*</span></label>
 					<div class="col-md-6">
-						<input type="text" class="form-control" name="title" value="<?php echo set_value('title', $menu['title']); ?>" />
+						<input type="text" class="form-control" name="title" value="<?php echo set_value('title', $title); ?>" />
 						<span class="error"></span>
 					</div>
 				</div>
@@ -42,11 +94,12 @@
 					<label  class="col-md-3 control-label"><?php echo translate('publish'); ?></label>
 					<div class="col-md-6">
 	                    <div class="material-switch">
-	                        <input class="switch_lang" name="publish" id="publish" type="checkbox" <?php echo set_checkbox('publish', '1', $menu['publish'] ? true : false); ?> />
+	                        <input class="switch_lang" name="publish" id="publish" type="checkbox" <?php echo set_checkbox('publish', '1', $publish ? true : false); ?> />
 	                        <label for="publish" class="label-primary"></label>
 	                    </div>
 					</div>
 				</div>
+				<?php if (!$menu['system']): ?>
 				<div class="form-group">
 					<label  class="col-md-3 control-label"><?php echo translate('target_new_window'); ?></label>
 					<div class="col-md-6">
@@ -56,7 +109,6 @@
 	                    </div>
 					</div>
 				</div>
-				<?php if (!$menu['system']): ?>
 				<div class="form-group">
 					<label  class="col-md-3 control-label"><?php echo translate('external_url'); ?></label>
 					<div class="col-md-6">
@@ -74,6 +126,22 @@
 					</div>
 				</div>
 				<?php endif; ?>
+				<div class="form-group">
+					<label class="col-md-3 control-label"><?=translate('parent_menu')?></label>
+					<div class="col-md-6">
+						<?php
+						$getMenuList = $this->frontend_model->getMenuList($branch_id);
+			            $array = array(0 => translate('select'));
+			            foreach ($getMenuList as $row) {
+			            	if ($row['id'] == $menu['id']) continue;
+			                $array[$row['id']] = ' - ' . $row['title'];
+			            }
+						echo form_dropdown("parent_id", $array, $parent_id, "class='form-control' data-width='100%'  " . $parent_menu . "
+						data-plugin-selectTwo  data-minimum-results-for-search='Infinity'");
+						?>
+						<span class="error"></span>
+					</div>
+				</div>
 				<footer class="panel-footer mt-lg">
 					<div class="row">
 						<div class="col-md-2 col-md-offset-3">
