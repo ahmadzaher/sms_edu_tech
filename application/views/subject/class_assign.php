@@ -97,7 +97,7 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label"><?=translate('section')?> <span class="required">*</span></label>
                     <div class="col-md-6 mb-md">
-                        <select name="sections[]" class="form-control" data-plugin-selectTwo multiple id='section_holder' data-width="100%"
+                        <select name="sections[]" class="form-control" data-plugin-selectTwo multiple id='section_id' data-width="100%"
                                 data-plugin-options='{"placeholder": "<?=translate('select_multiple_subject')?>"}'>
                             <?php
                             if(!empty($branch_id)):
@@ -179,6 +179,7 @@
 <?php endif; ?>
 
 <script type="text/javascript">
+
 	$(document).ready(function () {
 		$(document).on('change', '#branch_id', function() {
 			var branchID = $(this).val();
@@ -193,17 +194,6 @@
                 },
                 success: function (data) {
                     $('#subject_holder').html(data);
-                }
-            });
-            $.ajax({
-                url: "<?=base_url('ajax/getDataByBranch')?>",
-                type: 'POST',
-                data: {
-                    table: 'section',
-                    branch_id: branchID
-                },
-                success: function (data) {
-                    $('#section_holder').html(data);
                 }
             });
 		});
