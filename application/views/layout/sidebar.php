@@ -304,31 +304,31 @@
                             <?php if(get_permission('id_card_templete', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'card_manage/id_card_templete' || $sub_page == 'card_manage/id_card_templete_edit') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('card_manage/id_card_templete'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('id_card') . " " .  translate('templete'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('id_card_'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('generate_student_idcard', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'card_manage/generate_student_idcard') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('card_manage/generate_student_idcard'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('student') . " " .  translate('id_card'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('student_id_card'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('generate_employee_idcard', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'card_manage/generate_employee_idcard') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('card_manage/generate_employee_idcard'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('employee') . " " .  translate('id_card'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('employee_id_card'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('admit_card_templete', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'card_manage/admit_card_templete' || $sub_page == 'card_manage/admit_card_templete_edit') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('card_manage/admit_card_templete'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('admit_card') . " " .  translate('templete'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('admit_card_templete'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('generate_admit_card', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'card_manage/generate_student_admitcard') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('card_manage/generate_student_admitcard'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate') . " " .  translate('admit_card'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate_admit_card'); ?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -349,19 +349,19 @@
                             <?php if(get_permission('certificate_templete', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'certificate/index' || $sub_page == 'certificate/edit') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('certificate'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('certificate') . " " .  translate('templete'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('certificate_templete'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('generate_student_certificate', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'certificate/generate_student') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('certificate/generate_student'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate') . " " .  translate('student'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate_student'); ?></span>
                                 </a>
                             </li>
                             <?php } if(get_permission('generate_employee_certificate', 'is_view')){ ?>
                             <li class="<?php if ($sub_page == 'certificate/generate_employee') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('certificate/generate_employee'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate') . " " .  translate('employee'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('generate_employee'); ?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -576,7 +576,7 @@
                                     <?php } if(get_permission('subject_teacher_assign', 'is_view')) { ?>
                                     <li class="<?php if ($sub_page == 'subject/teacher_assign') echo 'nav-active';?>">
                                         <a href="<?=base_url('subject/teacher_assign')?>">
-                                            <span><?=translate('teacher') . ' ' . translate('assign')?></span>
+                                            <span><?=translate('teacher_assign')?></span>
                                         </a>
                                     </li>
                                     <?php } ?>
@@ -586,7 +586,7 @@
                             <?php if(get_permission('class_timetable', 'is_view')) { ?>
                             <li class="<?php if ($sub_page == 'timetable/viewclass' || $sub_page == 'timetable/update_classwise' || $sub_page == 'timetable/set_classwise') echo 'nav-active';?>">
                                 <a href="<?=base_url('timetable/viewclass')?>">
-                                    <span><i class="fas fa-dna" aria-hidden="true"></i><?=translate('class') . " " . translate('schedule')?></span>
+                                    <span><i class="fas fa-dna" aria-hidden="true"></i><?=translate('class_schedule')?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -734,7 +734,7 @@
                             <!-- exam schedule -->
 							<li class="nav-parent <?php if ($main_menu == 'exam_timetable') echo 'nav-expanded nav-active';?>">
                                 <a>
-                                    <i class="fas fa-dna"></i> <span><?=translate('exam') . " " . translate('schedule')?></span>
+                                    <i class="fas fa-dna"></i> <span><?=translate('exam_schedule')?></span>
                                 </a>
                                 <ul class="nav nav-children">
                                     <?php if(get_permission('exam_timetable', 'is_view')) { ?>
@@ -949,13 +949,13 @@
                             <?php } if (get_permission('book_request', 'is_view')) {  ?>
                             <li class="<?php if ($sub_page == 'library/request') echo 'nav-active';?>">
                                 <a href="<?=base_url('library/request')?>">
-                                    <span><i class="fas fa-caret-right"></i>My Issued Book</span>
+                                    <span><i class="fas fa-caret-right"></i><?=translate('my_issued_book')?></span>
                                 </a>
                             </li>
                             <?php } if (get_permission('book_manage', 'is_view')) {  ?>
                             <li class="<?php if ($sub_page == 'library/book_manage') echo 'nav-active';?>">
                                 <a href="<?=base_url('library/book_manage')?>">
-                                    <span><i class="fas fa-caret-right"></i>Book Issue/Return</span>
+                                    <span><i class="fas fa-caret-right"></i><?=translate('book_issue_return')?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -1002,23 +1002,23 @@
                             <?php if (get_permission('sendsmsmail', 'is_add')) {  ?>
                             <li class="<?php if ($sub_page == 'sendsmsmail/sms' || $sub_page == 'sendsmsmail/email' || $sub_page == 'sendsmsmail/semysms') echo 'nav-active';?>">
                                 <a href="<?=base_url('sendsmsmail/semysms')?>">
-                                    <span><i class="fas fa-caret-right"></i><?=translate('send')?> Sms / Email</span>
+                                    <span><i class="fas fa-caret-right"></i><?=translate('send_sms_email')?></span>
                                 </a>
                             </li>
                             <li class="<?php if ($sub_page == 'sendsmsmail/campaign_reports') echo 'nav-active';?>">
                                 <a href="<?=base_url('sendsmsmail/campaign_reports')?>">
-                                    <span><i class="fas fa-caret-right"></i>Sms / Email <?=translate('report')?></span>
+                                    <span><i class="fas fa-caret-right"></i><?=translate('sms_email_report')?></span>
                                 </a>
                             </li>
                             <?php } if (get_permission('sendsmsmail_template', 'is_view')) {  ?>
                             <li class="<?php if ($sub_page == 'sendsmsmail/template_sms' || $sub_page == 'sendsmsmail/template_edit_sms') echo 'nav-active';?>">
                                 <a href="<?=base_url('sendsmsmail/template/sms')?>">
-                                    <span><i class="fas fa-caret-right"></i> <?=translate('sms') . " " . translate('template')?></span>
+                                    <span><i class="fas fa-caret-right"></i> <?=translate('sms_template')?></span>
                                 </a>
                             </li>
                             <li class="<?php if ($sub_page == 'sendsmsmail/template_email' || $sub_page == 'sendsmsmail/template_edit_email') echo 'nav-active';?>">
                                 <a href="<?=base_url('sendsmsmail/template/email')?>">
-                                    <span><i class="fas fa-caret-right"></i> <?=translate('email') . " " . translate('template')?></span>
+                                    <span><i class="fas fa-caret-right"></i> <?=translate('email_template')?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -1112,7 +1112,7 @@
                             <?php } if(get_permission('voucher_head', 'is_view') || get_permission('voucher_head', 'is_add')){ ?>
                             <li class="<?php if ($sub_page == 'accounting/voucher_head') echo 'nav-active'; ?>">
                                 <a href="<?php echo base_url('accounting/voucher_head'); ?>">
-                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('voucher') . " " . translate('head'); ?></span>
+                                    <span><i class="fas fa-caret-right" aria-hidden="true"></i><?php echo translate('voucher_head'); ?></span>
                                 </a>
                             </li>
                             <?php } ?>
@@ -1179,19 +1179,19 @@
                                 <a><i class="fas fa-print"></i><span><?php echo translate('financial_reports'); ?></span></a>
                                 <ul class="nav nav-children">
                                     <li class="<?php if ($sub_page == 'accounting/account_statement') echo 'nav-active'; ?>">
-                                        <a href="<?php echo base_url('accounting/account_statement'); ?>"><?php echo translate('account') . " " . translate('statement'); ?></a>
+                                        <a href="<?php echo base_url('accounting/account_statement'); ?>"><?php echo translate('account_statement'); ?></a>
                                     </li>
                                     <li class="<?php if ($sub_page == 'accounting/income_repots') echo 'nav-active'; ?>">
-                                        <a href="<?php echo base_url('accounting/income_repots'); ?>"><?php echo translate('income') . " " . translate('repots'); ?></a>
+                                        <a href="<?php echo base_url('accounting/income_repots'); ?>"><?php echo translate('income_repots'); ?></a>
                                     </li>
                                     <li class="<?php if ($sub_page == 'accounting/expense_repots') echo 'nav-active'; ?>">
-                                        <a href="<?php echo base_url('accounting/expense_repots'); ?>"> <?php echo translate('expense') . " " . translate('repots'); ?></a>
+                                        <a href="<?php echo base_url('accounting/expense_repots'); ?>"> <?php echo translate('expense_repots'); ?></a>
                                     </li>
                                     <li class="<?php if ($sub_page == 'accounting/transitions_repots') echo 'nav-active'; ?>">
-                                        <a href="<?php echo base_url('accounting/transitions_repots'); ?>"> <?php echo translate('transitions') . " " . translate('reports'); ?></a>
+                                        <a href="<?php echo base_url('accounting/transitions_repots'); ?>"> <?php echo translate('transitions_repots'); ?></a>
                                     </li>
                                     <li class="<?php if ($sub_page == 'accounting/balance_sheet') echo 'nav-active'; ?>">
-                                        <a href="<?php echo base_url('accounting/balance_sheet'); ?>"><?php echo translate('balance') . " " . translate('sheet'); ?></a>
+                                        <a href="<?php echo base_url('accounting/balance_sheet'); ?>"><?php echo translate('balance_repots'); ?></a>
                                     </li>
                                     <li class="<?php if ($sub_page == 'accounting/income_vs_expense') echo 'nav-active'; ?>">
                                         <a href="<?php echo base_url('accounting/incomevsexpense'); ?>"> <?php echo translate('income_vs_expense'); ?></a>
@@ -1207,19 +1207,19 @@
                                     <?php if(get_permission('student_attendance_report', 'is_view')) { ?>
                                     <li class="<?php if ($sub_page == 'attendance/student_report') echo 'nav-active';?>">
                                         <a href="<?=base_url('attendance/studentwise_report')?>">
-                                            <?=translate('student') . ' ' . translate('reports')?>
+                                            <?=translate('student_reports')?>
                                         </a>
                                     </li>
                                     <?php } if(get_permission('employee_attendance_report', 'is_view')) { ?>
                                     <li class="<?php if ($sub_page == 'attendance/employees_report') echo 'nav-active';?>">
                                         <a href="<?=base_url('attendance/employeewise_report')?>">
-                                            <?=translate('employee') . ' ' . translate('reports')?>
+                                            <?=translate('employee_reports')?>
                                         </a>
                                     </li>
                                     <?php } if(get_permission('exam_attendance_report', 'is_view')) { ?>
                                     <li class="<?php if ($sub_page == 'attendance/exam_report') echo 'nav-active';?>">
                                         <a href="<?=base_url('attendance/examwise_report')?>">
-                                            <?=translate('exam') . ' ' . translate('reports')?>
+                                            <?=translate('exam_reports')?>
                                         </a>
                                     </li>
                                     <?php } ?>
@@ -1240,7 +1240,7 @@
                                     <?php } if (get_permission('leave_reports', 'is_view')) { ?>
                                     <li class="<?php if ($sub_page == 'leave/reports') echo 'nav-active';?>">
                                         <a href="<?=base_url('leave/reports')?>">
-                                            <span><?=translate('leave') . " " . translate('reports')?></span>
+                                            <span><?=translate('leave_reports')?></span>
                                         </a>
                                     </li>
                                     <?php } ?>
