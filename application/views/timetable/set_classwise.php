@@ -45,13 +45,13 @@
 							<label class="control-label"><?=translate('day')?> <span class="required">*</span></label>
 							<?php
 								$arrayDay = array(
-                                    "saturday" => "Saturday",
-									"sunday" => "Sunday",
-									"monday" => "Monday",
-									"tuesday" => "Tuesday",
-									"wednesday" => "Wednesday",
-									"thursday" => "Thursday",
-                                    "friday" => "Friday"
+                                    "saturday" => translate("Saturday"),
+									"sunday" => translate("Sunday"),
+									"monday" => translate("Monday"),
+									"tuesday" => translate("Tuesday"),
+									"wednesday" => translate("Wednesday"),
+									"thursday" => translate("Thursday"),
+                                    "friday" => translate("Friday")
 								);
 								echo form_dropdown("day", $arrayDay, set_value('day'), "class='form-control' required
 								data-plugin-selectTwo data-width='100%' data-minimum-results-for-search='Infinity' ");
