@@ -299,11 +299,11 @@
 						<i class="fas fa-university"></i> <?=translate('bank_details')?>
 					</div>
 					<div class="mb-sm checkbox-replace">
-						<label class="i-checks"><input type="checkbox" name="chkskipped" id="chk_bank_skipped" value="true" <?=set_checkbox('chkskipped', 'true')?> >
+						<label class="i-checks"><input type="checkbox" name="chkskipped" id="chk_bank_skipped" checked value="true" <?=set_checkbox('chkskipped', 'true')?> >
 							<i></i> <?=translate('skipped_bank_details')?>
 						</label>
 					</div>
-					<div id="bank_details_form" <?php if(!empty(set_value('chkskipped'))) { ?> style="display: none" <?php } ?>>
+					<div id="bank_details_form" <?php if(empty(set_value('chkskipped'))) { ?> style="display: none" <?php } ?>>
 						<div class="row">
 							<div class="col-md-4 mb-sm">
 								<div class="form-group">
