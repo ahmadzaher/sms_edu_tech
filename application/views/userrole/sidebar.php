@@ -65,7 +65,7 @@ if ((is_parent_loggedin() && !empty(get_activeChildren_id())) || is_student_logg
 							<!-- class schedule -->
 							<li class="<?php if ($sub_page == 'userrole/class_schedule') echo 'nav-active'; ?> ">
 								<a href="<?=base_url('userrole/class_schedule')?>">
-									<i class="fas fa-dna"></i><span><?=translate('class') . " " . translate('schedule')?></span>
+									<i class="fas fa-dna"></i><span><?=translate('class_schedule')?></span>
 								</a>
 							</li>
                         </ul>

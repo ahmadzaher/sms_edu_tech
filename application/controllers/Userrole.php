@@ -57,7 +57,7 @@ class Userrole extends User_Controller
         $this->db->order_by('time_start', 'asc');
         $this->data['timetables'] = $this->db->get_where('timetable_class', $arrayTimetable)->result();
         $this->data['student'] = $stu;
-        $this->data['title'] = translate('class') . " " . translate('schedule');
+        $this->data['title'] = translate('class_schedule');
         $this->data['sub_page'] = 'userrole/class_schedule';
         $this->data['main_menu'] = 'academic';
         $this->load->view('layout/index', $this->data);

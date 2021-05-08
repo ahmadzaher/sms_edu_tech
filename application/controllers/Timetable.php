@@ -52,7 +52,7 @@ class Timetable extends Admin_Controller
             $this->data['section_id'] = $sectionID;
         }
         $this->data['branch_id'] = $branchID;
-        $this->data['title'] = translate('class') . " " . translate('schedule');
+        $this->data['title'] = translate('class_schedule');
         $this->data['sub_page'] = 'timetable/viewclass';
         $this->data['main_menu'] = 'timetable';
         $this->load->view('layout/index', $this->data);
@@ -108,7 +108,7 @@ class Timetable extends Admin_Controller
         );
         $this->db->order_by('time_start', 'asc');
         $this->data['timetables'] = $this->db->get_where('timetable_class', $timetable_array)->result();
-        $this->data['title'] = translate('class') . " " . translate('schedule');
+        $this->data['title'] = translate('class_schedule');
         $this->data['sub_page'] = 'timetable/update_classwise';
         $this->data['main_menu'] = 'timetable';
         $this->data['headerelements'] = array(
