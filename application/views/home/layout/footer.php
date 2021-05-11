@@ -9,16 +9,16 @@
                     <div class="footer-logo">
                         <img src="<?php echo base_url('uploads/frontend/images/' . $cms_setting['logo']); ?>" alt="Logo">
                     </div>
-                    <div class="footer-select">
-                        <div class="form-group">
-                            <?php
-                                $branch_list = $this->home_model->branch_list();
-                                $default_branch = $this->home_model->getDefaultBranch();
-                                echo form_dropdown("branch_id", $branch_list, $default_branch, "class='form-control' id='activateSchool'
-                                data-plugin-selectTwo data-minimum-results-for-search='Infinity'");
-                            ?>
-                        </div>
-                    </div>
+<!--                    <div class="footer-select">-->
+<!--                        <div class="form-group">-->
+<!--                            --><?php
+//                                $branch_list = $this->home_model->branch_list();
+//                                $default_branch = $this->home_model->getDefaultBranch();
+//                                echo form_dropdown("branch_id", $branch_list, $default_branch, "class='form-control' id='activateSchool'
+//                                data-plugin-selectTwo data-minimum-results-for-search='Infinity'");
+//                            ?>
+<!--                        </div>-->
+<!--                    </div>-->
                     <p class="footer-dec"><?php echo $cms_setting['footer_about_text']; ?></p>
                     <ul class="social">
                         <li><a href="<?php echo $cms_setting['facebook_url']; ?>" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
