@@ -358,7 +358,7 @@
 					<div class="row">
 						<div class="col-md-4 mb-sm">
 							<div class="form-group">
-								<label class="control-label"><?=translate('occupation')?> <span class="required">*</span></label>
+								<label class="control-label"><?=translate('occupation')?></label>
 								<input class="form-control" name="grd_occupation" value="<?=set_value('grd_occupation')?>" type="text">
 								<span class="error"><?=form_error('grd_occupation')?></span>
 							</div>

@@ -35,7 +35,7 @@ class Parents extends Admin_Controller
         }
         $this->form_validation->set_rules('name', translate('name'), 'trim|required');
         $this->form_validation->set_rules('relation', translate('relation'), 'trim|required');
-        $this->form_validation->set_rules('occupation', translate('occupation'), 'trim|required');
+        $this->form_validation->set_rules('occupation', translate('occupation'), 'trim');
         $this->form_validation->set_rules('income', translate('income'), 'trim|numeric');
         $this->form_validation->set_rules('mobileno', translate('mobile_no'), 'trim|required');
         $this->form_validation->set_rules('email', translate('email'), 'trim|valid_email');

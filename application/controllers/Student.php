@@ -83,7 +83,7 @@ class Student extends Admin_Controller
             if (!isset($_POST['guardian_chk'])) {
                 $this->form_validation->set_rules('grd_name', translate('name'), 'trim|required');
                 $this->form_validation->set_rules('grd_relation', translate('relation'), 'trim|required');
-                $this->form_validation->set_rules('grd_occupation', translate('occupation'), 'trim|required');
+                $this->form_validation->set_rules('grd_occupation', translate('occupation'), 'trim');
                 $this->form_validation->set_rules('grd_mobileno', translate('mobile_no'), 'trim|required');
                 $this->form_validation->set_rules('grd_email', translate('email'), 'trim|valid_email');
                 if ($getBranch['grd_generate'] == 0) {

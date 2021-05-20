@@ -108,7 +108,7 @@
 					<div class="row">
 						<div class="col-md-4 mb-sm">
 							<div class="form-group">
-								<label class="control-label"><?=translate('occupation')?> <span class="required">*</span></label>
+								<label class="control-label"><?=translate('occupation')?></label>
 								<input type="text" class="form-control" name="occupation" value="<?=set_value('occupation', $parent['occupation'])?>" autocomplete="off" />
 								<span class="error"><?php echo form_error('occupation'); ?></span>
 							</div>
