@@ -3,7 +3,7 @@
 	<div class="col-md-5">
 		<section class="panel">
 			<header class="panel-heading">
-				<h4 class="panel-title"><i class="far fa-edit"></i> <?php echo translate('add') . " " . translate('category'); ?></h4>
+				<h4 class="panel-title"><i class="far fa-edit"></i> <?php echo translate('Add Category'); ?></h4>
 			</header>
             <?php echo form_open($this->uri->uri_string()); ?>
 				<div class="panel-body">
@@ -19,7 +19,7 @@
 					</div>
 				<?php endif; ?>
 					<div class="form-group mb-md">
-						<label class="control-label"><?php echo translate('category') . " " . translate('name'); ?> <span class="required">*</span></label>
+						<label class="control-label"><?php echo translate('category_name'); ?> <span class="required">*</span></label>
 						<input type="text" class="form-control" name="category_name" value="<?php echo set_value('category_name'); ?>" />
 						<span class="error"><?php echo form_error('category_name'); ?></span>
 					</div>
@@ -39,7 +39,7 @@
 	<div class="col-md-<?php if (get_permission('student_category', 'is_add')){ echo "7"; }else{ echo "12"; } ?>">
 		<section class="panel">
 			<header class="panel-heading">
-				<h4 class="panel-title"><i class="fas fa-list-ul"></i> <?php echo translate('category') . " " . translate('list'); ?></h4>
+				<h4 class="panel-title"><i class="fas fa-list-ul"></i> <?php echo translate('category_list'); ?></h4>
 			</header>
 
 			<div class="panel-body">

@@ -85,7 +85,7 @@
                             <span class="error"></span>
 
                             <div class="checkbox-replace mt-sm pr-xs pull-right">
-                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_role"><i></i> Select All</label>
+                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_role"><i></i> <?=translate('Select All') ?></label>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             <span class="error"></span>
 
                             <div class="checkbox-replace mt-sm pr-xs pull-right">
-                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_recipients"><i></i> Select All</label>
+                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_recipients"><i></i> <?=translate('Select All') ?></label>
                             </div>
                         </div>
                     </div>
@@ -135,7 +135,7 @@
                             </select>
                             <span class="error"></span>
                             <div class="checkbox-replace mt-sm pr-xs pull-right">
-                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_section"><i></i> Select All</label>
+                                <label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_section"><i></i><?=translate('Select All') ?></label>
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                     <div class="col-md-12 mb-xs">
                         <div class="form-group">
                             <div class="checkbox-replace">
-                                <label class="i-checks"><input type="checkbox" name="send_later" id="send_later"><i></i> Send Later</label>
+                                <label class="i-checks"><input type="checkbox" name="send_later" id="send_later"><i></i> <?=translate('Send Later') ?></label>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                 <div class="row">
                     <div class="col-md-8 mb-sm">
                         <div class="form-group">
-                            <label class="control-label">Schedule Date <span class="required">*</span></label>
+                            <label class="control-label"><?=translate('Schedule Data') ?> <span class="required">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
                                 <input type="text" class="form-control" name="schedule_date" id="schedule_date" disabled value="<?=date('Y-m-d')?>" data-plugin-datepicker />
@@ -162,7 +162,7 @@
                     </div>
                     <div class="col-md-4 mb-sm">
                         <div class="form-group">
-                            <label class="control-label">Schedule Time <span class="required">*</span></label>
+                            <label class="control-label"><?=translate('Schedule Time') ?> <span class="required">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="far fa-clock"></i></span>
                                 <input type="text" name="schedule_time" id="schedule_time" disabled data-plugin-timepicker class="form-control"  value="<?=date('H:M a')?>" />
@@ -173,7 +173,7 @@
                     </div>
                 </div>
                 <div class="mt-md">
-                    <strong>Dynamic Tag : </strong>
+                    <strong><?=translate('Dynamic Tags') ?> : </strong>
                     <a data-value=" {name} " class="btn btn-default btn-xs btn_tag ">{name}</a>
                     <a data-value=" {email} " class="btn btn-default btn-xs btn_tag">{email}</a>
                     <a data-value=" {mobile_no} " class="btn btn-default btn-xs btn_tag">{mobile_no}</a>

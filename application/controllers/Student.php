@@ -277,7 +277,7 @@ class Student extends Admin_Controller
                 redirect(base_url('student/category'));
             }
         }
-        $this->data['title'] = translate('student') . " " . translate('details');
+        $this->data['title'] = translate('student_details');
         $this->data['sub_page'] = 'student/category';
         $this->data['main_menu'] = 'admission';
         $this->load->view('layout/index', $this->data);
