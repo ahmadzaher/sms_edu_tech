@@ -104,7 +104,9 @@
                                 $subjects = $this->app_lib->getSections(set_value('class_id'));
                                 foreach ($subjects as $subject):
                                     ?>
-                                    <option value="<?=$subject->id?>" <?=set_select('sections[]', $subject->id)?>><?=html_escape($subject->name)?></option>
+                                    <?php if(is_object($subject)) :?>
+                                        <option value="<?=$subject->id?>" <?=set_select('sections[]', $subject->id)?>><?=html_escape($subject->name)?></option>
+                                    <?php  endif;?>
                                 <?php endforeach; endif;?>
                         </select>
                         <span class="error"></span>
