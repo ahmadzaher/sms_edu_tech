@@ -322,7 +322,16 @@ class Subject extends Admin_Controller
                 $this->db->group_by('timetable_class.subject_id');
                 $query = $this->db->get();
             } else {
-                $query = $this->db->select('id,subject_id')->group_by('timetable_class.subject_id')->where(array('class_id' => $classID, 'section_id' => $sectionID))->get('timetable_class');
+                $branch_id = $this->application_model->get_branch_id();
+//                $query = $this->db->select('id,subject_id')->group_by('timetable_class.subject_id')->where(array('class_id' => $classID, 'section_id' => $sectionID, 'session_id' => get_session_id(), 'branch_id' => $branch_id))->get('timetable_class');
+
+                $this->db->select('id, subject_id');
+                $query = $this->db->get_where('subject_assign', array(
+                    'class_id' => $classID,
+                    'section_id' => $sectionID,
+                    'session_id' => get_session_id(),
+                    'branch_id' => $branch_id
+                ));
             }
             if ($query->num_rows() != 0) {
                 $html .= '<option value="">' . translate('select') . '</option>';
