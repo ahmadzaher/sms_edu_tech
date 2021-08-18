@@ -3,7 +3,7 @@
 	<div class="col-md-5">
 		<section class="panel">
 			<header class="panel-heading">
-				<h4 class="panel-title"><i class="far fa-edit"></i> <?php echo translate('Add Category'); ?></h4>
+				<h4 class="panel-title"><i class="far fa-edit"></i> <?php echo translate('add_category'); ?></h4>
 			</header>
             <?php echo form_open($this->uri->uri_string()); ?>
 				<div class="panel-body">

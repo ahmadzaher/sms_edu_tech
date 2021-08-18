@@ -51,7 +51,7 @@
 							<span class="error"></span>
 						</div>
 						<div class="mt-md">
-							<strong><?=translate('Dynamic Tags') ?> : </strong>
+							<strong><?=translate('dynamic_tags') ?> : </strong>
 							<a data-value=" {name} " class="btn btn-default btn-xs btn_tag ">{name}</a>
 							<a data-value=" {email} " class="btn btn-default btn-xs btn_tag">{email}</a>
 							<a data-value=" {mobile_no} " class="btn btn-default btn-xs btn_tag">{mobile_no}</a>
@@ -148,7 +148,7 @@
 							<span class="error"></span>
 
 							<div class="checkbox-replace mt-sm pr-xs pull-right">
-								<label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_section"><i></i> <?=translate('Select All')?></label>
+								<label class="i-checks"><input type="checkbox" class="chk-sendsmsmail" name="chk_section"><i></i> <?=translate('select_all')?></label>
 							</div>
 						</div>
 					</div>
@@ -157,7 +157,7 @@
 					<div class="col-md-12 mb-xs">
 						<div class="form-group">
 							<div class="checkbox-replace">
-								<label class="i-checks"><input type="checkbox" name="send_later" id="send_later"><i></i> <?=translate('Send Later')?></label>
+								<label class="i-checks"><input type="checkbox" name="send_later" id="send_later"><i></i> <?=translate('send_later')?></label>
 							</div>
 						</div>
 					</div>
@@ -175,7 +175,7 @@
 					</div>
 					<div class="col-md-4 mb-sm">
 						<div class="form-group">
-							<label class="control-label"><?=translate('Schedule Time') ?> <span class="required">*</span></label>
+							<label class="control-label"><?=translate('schedule_time') ?> <span class="required">*</span></label>
 							<div class="input-group">
 								<span class="input-group-addon"><i class="far fa-clock"></i></span>
 								<input type="text" name="schedule_time" id="schedule_time" disabled data-plugin-timepicker class="form-control"  value="<?=date('H:M a')?>" />
